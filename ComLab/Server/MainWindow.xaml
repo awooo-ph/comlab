@@ -4,9 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ComLab"
+        xmlns:viewModels="clr-namespace:ComLab.ViewModels"
+        xmlns:converters="clr-namespace:ComLab.Converters"
+        xmlns:views="clr-namespace:ComLab.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}"
+        Title="ComLab" Height="450" Width="800">
+
+  <Grid>
+    <Grid IsEnabled="{Binding IsAuthenticated}">
+      <TextBox Width="77"/>
     </Grid>
+    <views:Login Visibility="{Binding IsAuthenticated,Converter={converters:BooleanToVisibility Collapsed,Visible}}"/>
+    <md:Snackbar MessageQueue="{Binding MessageQueue}"
+                 VerticalAlignment="Bottom"
+                 HorizontalAlignment="Center"/>
+  </Grid>
 </Window>

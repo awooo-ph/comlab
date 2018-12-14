@@ -9,5 +9,12 @@
     <Import_RootNamespace>ComLab</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\ConverterBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\EqualityToVisibility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\Inverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\IsNullConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />
   </ItemGroup>
 </Project>

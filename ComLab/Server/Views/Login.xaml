@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="ComLab.Views.Login"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ComLab.Views"
+             mc:Ignorable="d" 
+             DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewModels="clr-namespace:ComLab.ViewModels"
+             Background="{StaticResource MaterialDesignDivider}"
+             d:DesignHeight="450" d:DesignWidth="800">
+  <Grid>
+    <md:ColorZone HorizontalAlignment="Center"
+                  VerticalAlignment="Center">
+      <StackPanel>
+        <Grid Margin="20">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <md:PackIcon Kind="ShieldKey" Height="147" Width="147" Margin="20"/>
+          <StackPanel Grid.Column="1" Margin="20" VerticalAlignment="Center" Width="174">
+            <TextBox md:HintAssist.Hint="USERNAME"
+                 Text="{Binding Username}"
+                 md:HintAssist.IsFloating="True"
+                 md:TextFieldAssist.HasFilledTextField="True"
+                 md:TextFieldAssist.RippleOnFocusEnabled="True"/>
+            <PasswordBox md:HintAssist.Hint="PASSWORD"
+                 md:HintAssist.IsFloating="True"
+                 x:Name="PasswordBox"
+                 x:FieldModifier="private"
+                 md:TextFieldAssist.HasFilledTextField="True"
+                 md:TextFieldAssist.RippleOnFocusEnabled="True"/>
+          </StackPanel>
+        </Grid>
+        <UniformGrid Margin="20" Rows="1">
+          <Button Style="{StaticResource MaterialDesignFlatButton}"
+              Content="E_XIT" Margin="0 0 10 0"
+              Command="{Binding ExitCommand}"/>
+          <Button Content="LOGIN" IsDefault="True"
+              Margin="10 0 0 0"
+              Command="{Binding LoginCommand}"
+              CommandParameter="{Binding ElementName=PasswordBox}"/>
+        </UniformGrid>
+      </StackPanel>
+    </md:ColorZone>
+  </Grid>
+</UserControl>

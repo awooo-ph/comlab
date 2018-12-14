@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using System.Windows;
 
 namespace ComLab
@@ -13,5 +8,11 @@ namespace ComLab
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            Core.IsRunning = true;
+            Core.Context = SynchronizationContext.Current;
+        }
     }
 }
