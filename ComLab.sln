@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComLab.Server", "ComLab\Server\ComLab.Server.csproj", "{88A8FF8B-1365-4715-9DE2-D68BCBF44F21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComLab.Client", "ComLab\Client\ComLab.Client.csproj", "{17E29024-4189-4D28-9245-36CEA37801F3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ComLab.Common", "ComLab\ComLab\ComLab.Common.shproj", "{B2CC7943-DAFC-405B-82A1-666AAD528CB4}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		ComLab\ComLab\ComLab.projitems*{b2cc7943-dafc-405b-82a1-666aad528cb4}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{88A8FF8B-1365-4715-9DE2-D68BCBF44F21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88A8FF8B-1365-4715-9DE2-D68BCBF44F21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88A8FF8B-1365-4715-9DE2-D68BCBF44F21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88A8FF8B-1365-4715-9DE2-D68BCBF44F21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17E29024-4189-4D28-9245-36CEA37801F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17E29024-4189-4D28-9245-36CEA37801F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17E29024-4189-4D28-9245-36CEA37801F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17E29024-4189-4D28-9245-36CEA37801F3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B283CEB-F8EB-4746-80A0-FC82BBE57A81}
+	EndGlobalSection
+EndGlobal
