@@ -8,10 +8,11 @@
              DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:ComLab.ViewModels"
-             Background="{StaticResource MaterialDesignDivider}"
+             Background="{StaticResource PrimaryHueLightBrush}"
              d:DesignHeight="450" d:DesignWidth="800">
   <Grid>
     <md:ColorZone HorizontalAlignment="Center"
+                  md:ShadowAssist.ShadowDepth="Depth1"
                   VerticalAlignment="Center">
       <StackPanel>
         <Grid Margin="20">
@@ -20,13 +21,15 @@
             <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
           <md:PackIcon Kind="ShieldKey" Height="147" Width="147" Margin="20"/>
-          <StackPanel Grid.Column="1" Margin="20" VerticalAlignment="Center" Width="174">
+          <StackPanel Grid.Column="1" Margin="0 20 20 20" VerticalAlignment="Center" Width="222">
             <TextBox md:HintAssist.Hint="USERNAME"
                  Text="{Binding Username}"
+                     md:TextFieldAssist.TextFieldCornerRadius="7 7 0 0"
                  md:HintAssist.IsFloating="True"
                  md:TextFieldAssist.HasFilledTextField="True"
                  md:TextFieldAssist.RippleOnFocusEnabled="True"/>
             <PasswordBox md:HintAssist.Hint="PASSWORD"
+                         md:TextFieldAssist.TextFieldCornerRadius="0 0 7 7"
                  md:HintAssist.IsFloating="True"
                  x:Name="PasswordBox"
                  x:FieldModifier="private"

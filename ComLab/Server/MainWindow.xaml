@@ -8,17 +8,65 @@
         xmlns:converters="clr-namespace:ComLab.Converters"
         xmlns:views="clr-namespace:ComLab.Views"
         mc:Ignorable="d"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        WindowState="Maximized"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="14"
+        WindowStartupLocation="CenterScreen"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-        DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}"
+        xmlns:mi="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
         Title="ComLab" Height="450" Width="800">
-
-  <Grid>
+  <Window.Resources>
+    <DataTemplate DataType="{x:Type viewModels:Students}">
+      <views:Students/>
+    </DataTemplate>
+  </Window.Resources>
+  <md:DrawerHost IsLeftDrawerOpen="{Binding IsMenuOpen}"
+                 LeftDrawerBackground="{StaticResource MaterialDesignBackground}">
+    <md:DrawerHost.LeftDrawerContent>
+      <views:MainMenu/>
+    </md:DrawerHost.LeftDrawerContent>
+    <Grid>
     <Grid IsEnabled="{Binding IsAuthenticated}">
-      <TextBox Width="77"/>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+        <mi:AppBar Title="ComLab Manager" ShowNavigationDrawerButton="{Binding PinMenu,Converter={converters:Inverter}}"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   IsNavigationDrawerOpen="{Binding IsMenuOpen, Mode=TwoWay}"
+                   x:Name="AppBar" x:FieldModifier="private">
+
+        </mi:AppBar>
+
+        <md:TransitioningContent Content="{Binding PageContent}"
+                                 Background="{StaticResource MaterialDesignDivider}"
+                                 Grid.Column="1"
+                                 Grid.Row="1"/>
+
+        <Grid Grid.Column="0"
+              Grid.Row="1"
+              Visibility="{Binding PinMenu,Converter={converters:BooleanToVisibility}}">
+
+          <views:MainMenu TitleVisibility="Collapsed" />
+          <Rectangle Fill="{StaticResource MaterialDesignDivider}"
+                     Width="1"
+                     HorizontalAlignment="Right"/>
+        </Grid>
     </Grid>
     <views:Login Visibility="{Binding IsAuthenticated,Converter={converters:BooleanToVisibility Collapsed,Visible}}"/>
     <md:Snackbar MessageQueue="{Binding MessageQueue}"
                  VerticalAlignment="Bottom"
                  HorizontalAlignment="Center"/>
   </Grid>
+  </md:DrawerHost>
 </Window>

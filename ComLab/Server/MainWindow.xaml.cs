@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows;
+using ComLab.ViewModels;
 
 namespace ComLab
 {
@@ -12,6 +13,7 @@ namespace ComLab
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = MainViewModel.Instance;
         }
 
         protected override void OnSourceInitialized(EventArgs e)
