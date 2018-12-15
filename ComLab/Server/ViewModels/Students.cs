@@ -5,7 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Input;
+using ComLab.Dialogs;
 using ComLab.Models;
+using MaterialDesignThemes.Wpf;
 
 namespace ComLab.ViewModels
 {
@@ -28,5 +31,17 @@ namespace ComLab.ViewModels
                 return _items;
             }
         }
+
+        private ICommand _deleteCommand;
+        public ICommand DeleteCommand => _deleteCommand ?? (_deleteCommand = new DelegateCommand<Student>(async d =>
+        {
+            var res = await MessageDialog.Show("CONFIRM DELETE",
+                $"Are you sure you want to delete {d.Fullname}?", "DELETE STUDENT", "CANCEL",
+                PackIconKind.AccountRemove);
+            if (!res) return;
+            d.Delete();
+            Cache.Remove(d);
+            MainViewModel.Notify($"{d.Fullname} deleted!");
+        }));
     }
 }
