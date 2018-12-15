@@ -45,8 +45,24 @@ namespace ComLab.ViewModels
                 if (value == _IsSelected) return;
                 _IsSelected = value;
                 OnPropertyChanged(nameof(IsSelected));
+                if(value) Command?.Execute(null);
             }
         }
+
+        private bool _RequireAdmin;
+
+        public bool RequireAdmin
+        {
+            get => _RequireAdmin;
+            set
+            {
+                if (value == _RequireAdmin) return;
+                _RequireAdmin = value;
+                OnPropertyChanged(nameof(RequireAdmin));
+            }
+        }
+
+
 
         private bool _IsSelectable = true;
 

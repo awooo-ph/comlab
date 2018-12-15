@@ -28,8 +28,20 @@ namespace ComLab.ViewModels
             {
                 if (_items != null) return _items;
                 _items = (ListCollectionView) CollectionViewSource.GetDefaultView(Cache);
+                _items.Filter = Filter;
+                Classes.Instance.Items.CurrentChanged += (sender, args) =>
+                {
+                    _items.Refresh();
+                };
                 return _items;
             }
+        }
+
+        private bool Filter(object obj)
+        {
+            if (!(obj is Student s)) return false;
+            if (!(Classes.Instance.Items.CurrentItem is Class c)) return true;
+            return c.IsEnrolled(s.Id);
         }
 
         private ICommand _deleteCommand;
@@ -43,5 +55,7 @@ namespace ComLab.ViewModels
             Cache.Remove(d);
             MainViewModel.Notify($"{d.Fullname} deleted!");
         }));
+
+        
     }
 }

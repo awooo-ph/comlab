@@ -19,10 +19,13 @@
         TextOptions.TextRenderingMode="Auto"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mi="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
-        Title="ComLab" Height="450" Width="800">
+        Title="ComLab" Height="450" MinWidth="777">
   <Window.Resources>
     <DataTemplate DataType="{x:Type viewModels:Students}">
       <views:Students/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModels:Classes}">
+      <views:Classes/>
     </DataTemplate>
   </Window.Resources>
   <md:DialogHost Identifier="DialogHost" CloseOnClickAway="True">
@@ -49,12 +52,19 @@
 
         </mi:AppBar>
 
-        <md:TransitioningContent Content="{Binding PageContent}"
-                                 Background="{StaticResource MaterialDesignDivider}"
-                                 Grid.Column="1"
-                                 Grid.Row="1"/>
+          <!--<md:DrawerHost Grid.Column="1"
+                         Grid.Row="1"
+                         Background="Transparent"
+                         RightDrawerBackground="{StaticResource MaterialDesignPaper}"
+                         RightDrawerContent="{Binding RightDrawer}"
+                         IsRightDrawerOpen="{Binding IsRightDrawerOpen}">-->
+            <md:TransitioningContent Content="{Binding PageContent}"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            Background="{StaticResource MaterialDesignDivider}"/>
+          <!--</md:DrawerHost>-->
 
-        <Grid Grid.Column="0"
+          <Grid Grid.Column="0"
               Grid.Row="1"
               Visibility="{Binding PinMenu,Converter={converters:BooleanToVisibility}}">
 
@@ -65,7 +75,7 @@
         </Grid>
     </Grid>
     <views:Login Visibility="{Binding IsAuthenticated,Converter={converters:BooleanToVisibility Collapsed,Visible}}"/>
-    <md:Snackbar MessageQueue="{Binding MessageQueue}"
+    <md:Snackbar MessageQueue="{Binding Source={x:Static viewModels:MainViewModel.MessageQueue}}"
                  VerticalAlignment="Bottom"
                  HorizontalAlignment="Center"/>
   </Grid>

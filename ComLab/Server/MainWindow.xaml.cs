@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using ComLab.ViewModels;
@@ -20,6 +21,8 @@ namespace ComLab
         {
             base.OnSourceInitialized(e);
             Core.Context = SynchronizationContext.Current;
+            
         }
+
     }
 }

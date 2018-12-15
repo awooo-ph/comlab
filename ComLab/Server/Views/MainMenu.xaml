@@ -76,7 +76,7 @@
                       VerticalAlignment="Bottom"
                       HorizontalAlignment="Right"
                       Grid.Row="1">
-            <Button Content="ACCOUNT" 
+            <Button Content="LOCK" 
                     Style="{StaticResource MaterialDesignFlatButton}"/>
             <Button Content="LOGOUT" 
                     Style="{StaticResource MaterialDesignFlatButton}"/>
@@ -97,7 +97,8 @@
         </Grid>
 
       </Grid>
-      <!--<Rectangle Height="1" Fill="{StaticResource MaterialDesignDivider}"/>-->
+      <Rectangle Height="1" Fill="{StaticResource MaterialDesignDivider}"
+                 SnapsToDevicePixels="True"/>
     </StackPanel>
     <ListBox ItemsSource="{Binding MenuItems}"
              Padding="0"
@@ -109,6 +110,7 @@
           <Setter Property="IsEnabled" Value="{Binding IsHeader,Converter={converters:Inverter}}"/>
           <Setter Property="IsHitTestVisible" Value="{Binding IsHeader,Converter={converters:Inverter}}"/>
           <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+          <Setter Property="Cursor" Value="Hand"/>
         </Style>
       </ListBox.ItemContainerStyle>
       <ListBox.ItemTemplate>

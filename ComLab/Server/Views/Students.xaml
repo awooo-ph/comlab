@@ -14,13 +14,52 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <StackPanel Orientation="Horizontal" Margin="40 10">
-      <md:PackIcon Kind="AccountMultiple" Height="47" Width="47"/>
-      <TextBlock Text="  STUDENTS" FontSize="12pt" VerticalAlignment="Center"/>
-    </StackPanel>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <StackPanel Orientation="Horizontal" Margin="20 10">
+        <md:PackIcon Kind="Teaching" Height="47" Width="47"/>
+        <TextBlock Text="  CLASS MANAGER" FontSize="12pt" VerticalAlignment="Center"/>
+      </StackPanel>
+      <Rectangle Height="1" SnapsToDevicePixels="True"
+                 VerticalAlignment="Bottom"
+                 Fill="#a8adac"/>
+      <ScrollViewer   Grid.Column="1"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled">
+        <ListBox Style="{StaticResource TabHeaderListbox}"
+               IsSynchronizedWithCurrentItem="True"
+               Grid.Column="1"
+               ScrollViewer.HorizontalScrollBarVisibility="Auto"
+               ScrollViewer.VerticalScrollBarVisibility="Disabled"
+               HorizontalAlignment="Right"
+               ItemsSource="{Binding Source={x:Static viewModels:Classes.Instance},Path=Items}">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <StackPanel>
+                <TextBlock Text="{Binding Title}" TextWrapping="Wrap" HorizontalAlignment="Center"
+                       FontWeight="Bold"
+                       Margin="10 0"/>
+                <TextBlock Text="{Binding Schedule}" TextWrapping="Wrap" HorizontalAlignment="Center"
+                         FontSize="9pt" Opacity="0.7"
+                         Margin="10 0"/>
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <VirtualizingStackPanel Orientation="Horizontal"
+                        IsItemsHost="True"/>
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+        </ListBox>
+      </ScrollViewer>
+    </Grid>
 
-    <Rectangle Height="1" Fill="{StaticResource MaterialDesignDivider}"
-               VerticalAlignment="Bottom"/>
+   
 
     <DataGrid ItemsSource="{Binding Items}"
               Grid.Row="1"

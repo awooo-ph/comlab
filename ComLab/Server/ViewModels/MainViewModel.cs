@@ -16,32 +16,79 @@ namespace ComLab.ViewModels
 {
     class MainViewModel:ViewModelBase
     {
+        
+
         private MainViewModel()
         {
+            var ClassManager = new MenuItem
+            {
+                Title = "CLASS MANAGER",
+                Command = new DelegateCommand(d => { PageContent = Students.Instance; }),
+                IsSelected = true
+            };
+
             MenuItems = new List<MenuItem>
             {
-                new MenuItem {Title = "STUDENTS", IsHeader = true},
+                ClassManager,
                 new MenuItem
                 {
-                    Title = "MANAGE STUDENTS",
+                    Title = "ENROLL STUDENT",
+                    Command = new DelegateCommand(d=>
+                    {
+                        if (Classes.Instance.Items.Count == 0)
+                        {
+                            Classes.Instance.AddClassCommand.Execute(null);
+                            Classes.Instance.Items.MoveCurrentToFirst();
+                        }
+
+                        if (Classes.Instance.Items.CurrentItem == null) return;
+
+                        AddNewStudent();
+                        ClassManager.IsSelected = true;
+                    }),
+                    IsSelectable = false
+                },
+                new MenuItem
+                {
+                    Title = "CREATE NEW CLASS",
+                    Command = new DelegateCommand(d=>
+                        {
+                            Classes.Instance.AddClassCommand.Execute(null);
+                            ClassManager.IsSelected = true;
+                        }),
+                    IsSelectable = false
+                },
+                new MenuItem
+                {
+                    Title = "START CLASS",
+                    Command = new DelegateCommand(d=>
+                    {
+                        StartClass();
+                        ClassManager.IsSelected = true;
+                    }),
+                    IsSelectable = false
+                },
+
+                new MenuItem {Title = "ADMINISTRATION", IsHeader = true},
+                new MenuItem
+                {
+                    Title = "INSTRUCTORS",
                     Command = new DelegateCommand(d =>
                     {
-                        PageContent = Students.Instance;
-                    }),
-                    IsSelected = true
+                        PageContent = Classes.Instance;
+                    })
                 },
                 new MenuItem
                 {
-                    Title = "ATTENDANCE"
-                },
-                new MenuItem
-                {
-                    Title = "ADD NEW STUDENT",
-                    Command = new DelegateCommand(d=>AddNewStudent()),
-                    IsSelectable = false
+                    Title = "TERMINALS"
                 },
                 
             }; 
+        }
+
+        private void StartClass()
+        {
+            
         }
 
         private async void AddNewStudent()
@@ -50,6 +97,7 @@ namespace ComLab.ViewModels
             if (student == null) return;
             student.Save();
             Students.Cache.Add(student);
+
         }
 
         private INavigationItem _SelectedMenu;
@@ -81,6 +129,32 @@ namespace ComLab.ViewModels
                 if (value == _PageContent) return;
                 _PageContent = value;
                 OnPropertyChanged(nameof(PageContent));
+            }
+        }
+
+        private ViewModelBase _RightDrawer;
+
+        public ViewModelBase RightDrawer
+        {
+            get => _RightDrawer;
+            set
+            {
+                if (value == _RightDrawer) return;
+                _RightDrawer = value;
+                OnPropertyChanged(nameof(RightDrawer));
+            }
+        }
+
+        private bool _IsRightDrawerOpen;
+
+        public bool IsRightDrawerOpen
+        {
+            get => _IsRightDrawerOpen;
+            set
+            {
+                if (value == _IsRightDrawerOpen) return;
+                _IsRightDrawerOpen = value;
+                OnPropertyChanged(nameof(IsRightDrawerOpen));
             }
         }
         
@@ -191,14 +265,17 @@ namespace ComLab.ViewModels
 
             CurrentUser = instructor;
             IsAuthenticated = true;
+
+            if (Classes.Instance.Items.Count == 0)
+                Classes.Instance.AddClassCommand.Execute(null);
         }));
 
-        public void Notify(string message)
+        public static void Notify(string message)
         {
             MessageQueue.Enqueue(message);
         }
 
-        private SnackbarMessageQueue _messageQueue;
-        public SnackbarMessageQueue MessageQueue => _messageQueue ?? (_messageQueue = new SnackbarMessageQueue());
+        private static SnackbarMessageQueue _messageQueue;
+        public static SnackbarMessageQueue MessageQueue => _messageQueue ?? (_messageQueue = new SnackbarMessageQueue());
     }
 }

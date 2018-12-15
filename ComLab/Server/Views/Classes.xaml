@@ -5,8 +5,82 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ComLab.Views"
              mc:Ignorable="d" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <StackPanel Orientation="Horizontal" Margin="20 10">
+      <md:PackIcon Kind="Teaching" Height="47" Width="47"/>
+      <TextBlock Text="  CLASSES" FontSize="12pt" VerticalAlignment="Center"/>
+    </StackPanel>
+
+    <Rectangle Height="1" Fill="{StaticResource MaterialDesignDivider}"
+               Grid.ColumnSpan="2"
+               VerticalAlignment="Bottom"/>
+
+    <DataGrid ItemsSource="{Binding Items}"
+              Grid.Row="1"
+              FrozenColumnCount="1"
+              CanUserAddRows="False"
+              AutoGenerateColumns="False">
+      <DataGrid.Columns>
+        <DataGridTemplateColumn>
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button Style="{StaticResource MaterialDesignToolButton}"
+                      Content="{md:PackIcon Close}"
+                      Padding="0"
+                      Height="Auto"
+                      Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid},Path=DataContext.DeleteCommand}"
+                      CommandParameter="{Binding}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn Header="CLASS NAME" 
+                            Binding="{Binding StudentId,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+        <DataGridTextColumn Header="SCHEDULE" 
+                            Binding="{Binding Firstname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <Rectangle Width="1" Fill="{StaticResource MaterialDesignDivider}"
+               HorizontalAlignment="Right"/>
+
+    <DataGrid ItemsSource="{Binding Students}"
+              Grid.Row="1"
+              FrozenColumnCount="1"
+              CanUserAddRows="False"
+              AutoGenerateColumns="False">
+      <DataGrid.Columns>
+        <DataGridTemplateColumn>
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button Style="{StaticResource MaterialDesignToolButton}"
+                      Content="REMOVE"
+                      Padding="0"
+                      Height="Auto"
+                      Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid},Path=DataContext.DeleteCommand}"
+                      CommandParameter="{Binding}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn Header="STUDENT" 
+                            Binding="{Binding StudentId,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+        <DataGridTextColumn Header="SCHEDULE" 
+                            Binding="{Binding Firstname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
 </UserControl>
