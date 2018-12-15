@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:ComLab.Views"
              mc:Ignorable="d" 
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:viewModels="clr-namespace:ComLab.ViewModels"
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance viewModels:Students}">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -22,7 +23,40 @@
                VerticalAlignment="Bottom"/>
 
     <DataGrid ItemsSource="{Binding Items}"
-              Grid.Row="1">
+              Grid.Row="1"
+              FrozenColumnCount="1"
+              CanUserAddRows="False"
+              AutoGenerateColumns="False">
+      <DataGrid.Columns>
+        <DataGridTemplateColumn>
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button Style="{StaticResource MaterialDesignToolButton}"
+                      Content="{md:PackIcon Close}"
+                      Padding="0"
+                      Height="Auto"
+                      Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid},Path=DataContext.DeleteCommand}"
+                      CommandParameter="{Binding}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn Header="STUDENT ID" 
+                            Binding="{Binding StudentId,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+        <DataGridTextColumn Header="FIRST NAME" 
+                            Binding="{Binding Firstname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+        <DataGridTextColumn Header="LAST NAME" 
+                            Binding="{Binding Lastname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+        <DataGridTextColumn Header="COURSE" 
+                            Binding="{Binding Course,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+        <DataGridTextColumn Header="USERNAME" 
+                            Binding="{Binding Username,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+
+      </DataGrid.Columns>
     </DataGrid>
     </Grid>
 </UserControl>

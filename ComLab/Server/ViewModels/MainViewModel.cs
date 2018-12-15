@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using ComLab.Dialogs;
 using ComLab.Models;
 using MaterialDesignExtensions.Model;
 using MaterialDesignThemes.Wpf;
@@ -17,32 +18,38 @@ namespace ComLab.ViewModels
     {
         private MainViewModel()
         {
-            MenuItems = new List<INavigationItem>
+            MenuItems = new List<MenuItem>
             {
-                new SubheaderNavigationItem {Subheader = "STUDENTS"},
-                new FirstLevelNavigationItem
+                new MenuItem {Title = "STUDENTS", IsHeader = true},
+                new MenuItem
                 {
-                    Label = "MANAGE STUDENTS",
-                    NavigationItemSelectedCallback = d =>
+                    Title = "MANAGE STUDENTS",
+                    Command = new DelegateCommand(d =>
                     {
                         PageContent = Students.Instance;
-                        return true;
-                    },
+                    }),
                     IsSelected = true
                 },
-                new FirstLevelNavigationItem
+                new MenuItem
                 {
-                    Label = "ATTENDANCE"
+                    Title = "ATTENDANCE"
                 },
-                new FirstLevelNavigationItem
+                new MenuItem
                 {
-                    Label = "ADD NEW STUDENT"
+                    Title = "ADD NEW STUDENT",
+                    Command = new DelegateCommand(d=>AddNewStudent()),
+                    IsSelectable = false
                 },
-                new DividerNavigationItem(),
-                new SubheaderNavigationItem {Subheader = "CLASSES", IsSelectable = false},
-                new FirstLevelNavigationItem {Label = "VIEW ALL CLASSES"},
-                new FirstLevelNavigationItem {Label = "CREATE NEW CLASS"}
+                
             }; 
+        }
+
+        private async void AddNewStudent()
+        {
+            var student = await AddStudentDialog.Show();
+            if (student == null) return;
+            student.Save();
+            Students.Cache.Add(student);
         }
 
         private INavigationItem _SelectedMenu;
@@ -55,7 +62,11 @@ namespace ComLab.ViewModels
                 if (value == _SelectedMenu) return;              
                 IsMenuOpen = false;
                 _SelectedMenu = value;
-                value?.NavigationItemSelectedCallback(value);
+                if (value != null)
+                {
+                    value.IsSelected = (bool)(value?.NavigationItemSelectedCallback(value));
+                }
+                 
                 OnPropertyChanged(nameof(SelectedMenu));
             }
         }
@@ -73,7 +84,7 @@ namespace ComLab.ViewModels
             }
         }
         
-        public List<INavigationItem> MenuItems { get; }
+        public List<MenuItem> MenuItems { get; }
         
         private bool _IsMenuOpen;
 
@@ -88,7 +99,7 @@ namespace ComLab.ViewModels
             }
         }
 
-        private bool _PinMenu;
+        private bool _PinMenu = true;
 
         public bool PinMenu
         {

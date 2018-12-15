@@ -48,6 +48,31 @@ namespace ComLab.ViewModels
             }
         }
 
+        private bool _IsSelectable = true;
 
+        public bool IsSelectable
+        {
+            get => _IsSelectable;
+            set
+            {
+                if (value == _IsSelectable) return;
+                _IsSelectable = value;
+                OnPropertyChanged(nameof(IsSelectable));
+            }
+        }
+
+        private bool _IsHeader;
+
+        public bool IsHeader
+        {
+            get => _IsHeader;
+            set
+            {
+                if (value == _IsHeader) return;
+                _IsHeader = value;
+                OnPropertyChanged(nameof(IsHeader));
+            }
+        }
+        
     }
 }

@@ -25,6 +25,7 @@
       <views:Students/>
     </DataTemplate>
   </Window.Resources>
+  <md:DialogHost Identifier="DialogHost" CloseOnClickAway="True">
   <md:DrawerHost IsLeftDrawerOpen="{Binding IsMenuOpen}"
                  LeftDrawerBackground="{StaticResource MaterialDesignBackground}">
     <md:DrawerHost.LeftDrawerContent>
@@ -69,4 +70,5 @@
                  HorizontalAlignment="Center"/>
   </Grid>
   </md:DrawerHost>
+  </md:DialogHost>
 </Window>

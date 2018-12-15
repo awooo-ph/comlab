@@ -17,7 +17,8 @@ namespace ComLab.ViewModels
         public static Students Instance => _instance ?? (_instance = new Students());
 
         private ListCollectionView _items;
-        private ObservableCollection<Student> Cache => new ObservableCollection<Student>(Student.GetAll()?.Take(74)??new List<Student>());
+        private static ObservableCollection<Student> _cache;
+        public static ObservableCollection<Student> Cache => _cache??(_cache =new ObservableCollection<Student>(Student.GetAll()?.Take(74)??new List<Student>()));
         public ListCollectionView Items
         {
             get

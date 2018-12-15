@@ -1,28 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Threading.Tasks;
+using ComLab.Models;
+using MaterialDesignThemes.Wpf;
 
 namespace ComLab.Dialogs
 {
     /// <summary>
     /// Interaction logic for AddStudentDialog.xaml
     /// </summary>
-    public partial class AddStudentDialog : UserControl
+    public partial class AddStudentDialog
     {
-        public AddStudentDialog()
+        private AddStudentDialog()
         {
             InitializeComponent();
+            Student = new Student();
+            DataContext = this;
         }
+
+        public static async Task<Student> Show()
+        {
+            var dlg = new AddStudentDialog();
+            var res = await DialogHost.Show(dlg, "DialogHost") as bool?;
+            if (!(res ?? false)) return null;
+            return dlg.Student;
+        }
+
+        public Student Student { get; set; }
+
     }
 }
