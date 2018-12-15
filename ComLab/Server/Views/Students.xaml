@@ -5,14 +5,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ComLab.Views"
              mc:Ignorable="d" 
-             Margin="20"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <StackPanel Orientation="Horizontal" Margin="40 10">
+      <md:PackIcon Kind="AccountMultiple" Height="47" Width="47"/>
+      <TextBlock Text="  STUDENTS" FontSize="12pt" VerticalAlignment="Center"/>
+    </StackPanel>
+
+    <Rectangle Height="1" Fill="{StaticResource MaterialDesignDivider}"
+               VerticalAlignment="Bottom"/>
+
     <DataGrid ItemsSource="{Binding Items}"
-              AutoGenerateColumns="False">
-      <DataGrid.Columns>
-        <DataGridTextColumn Header="FASDF"/>
-      </DataGrid.Columns>
+              Grid.Row="1">
     </DataGrid>
     </Grid>
 </UserControl>

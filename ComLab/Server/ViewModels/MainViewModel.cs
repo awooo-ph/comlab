@@ -19,7 +19,6 @@ namespace ComLab.ViewModels
         {
             MenuItems = new List<INavigationItem>
             {
-                new DividerNavigationItem(),
                 new SubheaderNavigationItem {Subheader = "STUDENTS"},
                 new FirstLevelNavigationItem
                 {
@@ -30,6 +29,10 @@ namespace ComLab.ViewModels
                         return true;
                     },
                     IsSelected = true
+                },
+                new FirstLevelNavigationItem
+                {
+                    Label = "ATTENDANCE"
                 },
                 new FirstLevelNavigationItem
                 {

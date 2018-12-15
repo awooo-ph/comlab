@@ -59,7 +59,7 @@
 
           <views:MainMenu TitleVisibility="Collapsed" />
           <Rectangle Fill="{StaticResource MaterialDesignDivider}"
-                     Width="1"
+                     Width="1" SnapsToDevicePixels="True"
                      HorizontalAlignment="Right"/>
         </Grid>
     </Grid>
