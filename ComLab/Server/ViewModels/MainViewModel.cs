@@ -96,8 +96,8 @@ namespace ComLab.ViewModels
             var student = await AddStudentDialog.Show();
             if (student == null) return;
             student.Save();
-            Students.Cache.Add(student);
-
+            student.Enroll(CurrentUser.Id, Classes.Instance.Items.CurrentItem as Class);
+            if(!Students.Cache.Contains(student)) Students.Cache.Add(student);
         }
 
         private INavigationItem _SelectedMenu;

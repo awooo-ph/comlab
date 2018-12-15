@@ -14,10 +14,11 @@ namespace ComLab.Dialogs
     /// </summary>
     public partial class AddStudentDialog:INotifyPropertyChanged
     {
+        private readonly Student _newStudent = new Student();
         private AddStudentDialog()
         {
             InitializeComponent();
-            Student = new Student();
+            Student = _newStudent;
             DataContext = this;
         }
 
@@ -31,8 +32,8 @@ namespace ComLab.Dialogs
                 if (value == _StudentId) return;
                 _StudentId = value;
                 OnPropertyChanged(nameof(StudentId));
-                Student = Students.Cache.FirstOrDefault(x => x.StudentId.ToLower() == value.ToLower()) ??
-                    new Student();
+                Student = Students.Cache.FirstOrDefault(x => x.StudentId.ToLower() == value.ToLower()) ?? _newStudent;
+                _newStudent.StudentId = value;
                 OnPropertyChanged(nameof(Student));
             }
         }
