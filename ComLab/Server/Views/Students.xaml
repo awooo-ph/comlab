@@ -63,6 +63,7 @@
 
     <DataGrid ItemsSource="{Binding Items}"
               Grid.Row="1"
+              CanUserDeleteRows="False"
               FrozenColumnCount="1"
               CanUserAddRows="False"
               AutoGenerateColumns="False">

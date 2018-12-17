@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using ComLab.Network;
 using ComLab.ViewModels;
 
 namespace ComLab
@@ -21,7 +22,7 @@ namespace ComLab
         {
             base.OnSourceInitialized(e);
             Core.Context = SynchronizationContext.Current;
-            
+            Server.Start();
         }
 
     }

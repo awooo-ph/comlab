@@ -4,9 +4,65 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ComLab"
+        xmlns:viewModels="clr-namespace:ComLab.ViewModels"
+        xmlns:converters="clr-namespace:ComLab.Converters"
+        xmlns:views="clr-namespace:ComLab.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="14"
+        WindowStartupLocation="CenterScreen"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        SizeToContent="WidthAndHeight"
+        ShowInTaskbar="False"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="ComLab 2019" MinWidth="555" MinHeight="222">
     <Grid>
-        
+    <md:ColorZone Mode="Standard" md:ShadowAssist.ShadowDepth="Depth4" CornerRadius="7"
+                  Margin="74">
+      <Grid DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Image Source="norsu.png" Height="147" Width="147"
+               RenderOptions.BitmapScalingMode="HighQuality"
+               VerticalAlignment="Center"
+               Margin="20 20"/>
+        <StackPanel Grid.Column="1" Margin="20 40 40 40"
+                    Grid.Row="0">
+          <TextBox md:TextFieldAssist.RippleOnFocusEnabled="True"
+                   md:TextFieldAssist.HasFilledTextField="True"
+                   md:HintAssist.IsFloating="True"
+                   Text="{Binding Username,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                   md:TextFieldAssist.TextFieldCornerRadius="7 7 0 0"
+                   md:HintAssist.Hint="USERNAME"/>
+          <PasswordBox md:TextFieldAssist.RippleOnFocusEnabled="True"
+                   md:TextFieldAssist.HasFilledTextField="True"
+                   md:HintAssist.IsFloating="True"
+                       x:Name="PasswordBox" x:FieldModifier="private"
+                   md:TextFieldAssist.TextFieldCornerRadius="0 0 7 7"
+                   md:HintAssist.Hint="PASSWORD"/>
+        </StackPanel>
+        <Button Grid.Row="1" Grid.Column="1"
+                IsDefault="True"
+                Margin="20"
+                Command="{Binding LoginCommand}"
+                CommandParameter="{Binding ElementName=PasswordBox}"
+                HorizontalAlignment="Right"
+                Content="_LOGIN"/>
+      </Grid>
+    </md:ColorZone>
     </Grid>
 </Window>

@@ -80,7 +80,13 @@ namespace ComLab.ViewModels
                 },
                 new MenuItem
                 {
-                    Title = "TERMINALS"
+                    Title = "TERMINALS",
+                    IsSelectable = false,
+                    Command = new DelegateCommand(d =>
+                    {
+                        RightDrawer = Terminals.Instance;
+                        IsRightDrawerOpen = true;
+                    })
                 },
                 
             }; 

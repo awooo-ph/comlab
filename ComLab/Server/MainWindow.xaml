@@ -27,6 +27,9 @@
     <DataTemplate DataType="{x:Type viewModels:Classes}">
       <views:Classes/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModels:Terminals}">
+      <views:Terminals/>
+    </DataTemplate>
   </Window.Resources>
   <md:DialogHost Identifier="DialogHost" CloseOnClickAway="True">
   <md:DrawerHost IsLeftDrawerOpen="{Binding IsMenuOpen}"
@@ -52,17 +55,17 @@
 
         </mi:AppBar>
 
-          <!--<md:DrawerHost Grid.Column="1"
+          <md:DrawerHost Grid.Column="1"
                          Grid.Row="1"
                          Background="Transparent"
                          RightDrawerBackground="{StaticResource MaterialDesignPaper}"
                          RightDrawerContent="{Binding RightDrawer}"
-                         IsRightDrawerOpen="{Binding IsRightDrawerOpen}">-->
+                         IsRightDrawerOpen="{Binding IsRightDrawerOpen}">
             <md:TransitioningContent Content="{Binding PageContent}"
                             Grid.Column="1"
                             Grid.Row="1"
                             Background="{StaticResource MaterialDesignDivider}"/>
-          <!--</md:DrawerHost>-->
+        </md:DrawerHost>
 
           <Grid Grid.Column="0"
               Grid.Row="1"
