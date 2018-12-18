@@ -15,19 +15,30 @@
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        ResizeMode="NoResize"
-        WindowStyle="None"
-        AllowsTransparency="True"
-        Background="Transparent"
-        Topmost="True"
-        SizeToContent="WidthAndHeight"
+        Background="{StaticResource PrimaryHueDarkBrush}"
         ShowInTaskbar="False"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:network="clr-namespace:ComLab.Network"
         Title="ComLab 2019" MinWidth="555" MinHeight="222">
     <Grid>
-    <md:ColorZone Mode="Standard" md:ShadowAssist.ShadowDepth="Depth4" CornerRadius="7"
+    <md:Transitioner SelectedIndex="{Binding PageIndex}">
+      <md:TransitionerSlide>
+        <md:ColorZone Mode="Standard" md:ShadowAssist.ShadowDepth="Depth4" CornerRadius="7"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Margin="74">
+          <Grid>
+
+          </Grid>
+        </md:ColorZone>
+      </md:TransitionerSlide>
+      <md:TransitionerSlide>
+      <md:ColorZone Mode="Standard" md:ShadowAssist.ShadowDepth="Depth4" CornerRadius="7"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
                   Margin="74">
-      <Grid DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}">
+      <Grid DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}"
+            IsEnabled="{Binding Source={x:Static network:Client.Instance},Path=IsConnected}">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto"/>
           <ColumnDefinition Width="*"/>
@@ -45,14 +56,18 @@
           <TextBox md:TextFieldAssist.RippleOnFocusEnabled="True"
                    md:TextFieldAssist.HasFilledTextField="True"
                    md:HintAssist.IsFloating="True"
+                   Width="222"
+                   Margin="0 0 0 7"
                    Text="{Binding Username,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                   md:TextFieldAssist.TextFieldCornerRadius="7 7 0 0"
+                   md:TextFieldAssist.TextFieldCornerRadius="7"
                    md:HintAssist.Hint="USERNAME"/>
           <PasswordBox md:TextFieldAssist.RippleOnFocusEnabled="True"
+                       Width="222"
+                       Margin="0 7 0 0"
                    md:TextFieldAssist.HasFilledTextField="True"
                    md:HintAssist.IsFloating="True"
                        x:Name="PasswordBox" x:FieldModifier="private"
-                   md:TextFieldAssist.TextFieldCornerRadius="0 0 7 7"
+                   md:TextFieldAssist.TextFieldCornerRadius="7"
                    md:HintAssist.Hint="PASSWORD"/>
         </StackPanel>
         <Button Grid.Row="1" Grid.Column="1"
@@ -64,5 +79,7 @@
                 Content="_LOGIN"/>
       </Grid>
     </md:ColorZone>
-    </Grid>
+      </md:TransitionerSlide>
+    </md:Transitioner>
+  </Grid>
 </Window>

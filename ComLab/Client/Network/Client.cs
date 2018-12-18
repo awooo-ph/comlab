@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using ComLab.ViewModels;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 using NetworkCommsDotNet.DPSBase;
@@ -12,24 +13,24 @@ using NetworkCommsDotNet.Tools;
 
 namespace ComLab.Network
 {
-    class Client
+    class Client:ViewModelBase
     {
         private IPEndPoint _ServerEndPoint;
-
+        private DateTime _LastPing;
         private Client()
         {
             NetworkComms.DisableLogging();
             
             NetworkComms.IgnoreUnknownPacketTypes = true;
             var serializer = DPSManager.GetDataSerializer<NetworkCommsDotNet.DPSBase.ProtobufSerializer>();
-  //          NetworkComms.DefaultSendReceiveOptions.DataProcessors.Add(
-//                DPSManager.GetDataProcessor<RijndaelPSKEncrypter>());
+            NetworkComms.DefaultSendReceiveOptions.DataProcessors.Add(
+                DPSManager.GetDataProcessor<RijndaelPSKEncrypter>());
             NetworkComms.DefaultSendReceiveOptions = new SendReceiveOptions(serializer,
                 NetworkComms.DefaultSendReceiveOptions.DataProcessors, NetworkComms.DefaultSendReceiveOptions.Options);
 
-            //RijndaelPSKEncrypter.AddPasswordToOptions(NetworkComms.DefaultSendReceiveOptions.Options, "awooo");
+            RijndaelPSKEncrypter.AddPasswordToOptions(NetworkComms.DefaultSendReceiveOptions.Options, Utility.PSK);
 
-            //NetworkComms.AppendGlobalIncomingPacketHandler<ServerInfo>(ServerInfo.Header, ServerInfoReceived);
+            NetworkComms.AppendGlobalIncomingPacketHandler<Ping>(Ping.Header, PingHandler);
             
             PeerDiscovery.EnableDiscoverable(PeerDiscovery.DiscoveryMethod.UDPBroadcast);
 
@@ -47,48 +48,88 @@ namespace ComLab.Network
 
         }
 
-        private void _Start()
+        private async void PingHandler(PacketHeader packetheader, Connection connection, Ping incomingobject)
         {
-            Connection.StartListening(ConnectionType.UDP, new IPEndPoint(IPAddress.Any, 0), true);
+            IsConnected = true;
+            _LastPing = DateTime.Now;
+            var pong = new Pong
+            {
+                PingId = incomingobject.Id
+            };
+            await pong.Send(connection.ConnectionInfo.RemoteEndPoint);
+        }
+
+        private async void _Start()
+        {
+            while (true)
+            {
+                try
+                {
+                    Connection.StartListening(ConnectionType.UDP, new IPEndPoint(IPAddress.Any, 0), true);
+                    return;
+                }
+                catch (Exception)
+                {
+                    await Task.Delay(777);
+                }
+            }
         }
 
         public static void Start()
         {
             Instance._Start();
-            if(Instance._ServerEndPoint == null)
-                PeerDiscovery.DiscoverPeersAsync(PeerDiscovery.DiscoveryMethod.UDPBroadcast);
+            Instance._FindServer();
         }
 
-        //private async Task _FindServer()
-        //{
-        //    while (true)
-        //        try
-        //        {
-        //            var start = DateTime.Now;
-        //            PeerDiscovery.DiscoverPeersAsync(PeerDiscovery.DiscoveryMethod.UDPBroadcast);
-        //            while ((DateTime.Now - start).TotalSeconds < 7)
-        //            {
-        //                if (Server != null)
-        //                    break;
-        //                await TaskEx.Delay(TimeSpan.FromSeconds(1));
-        //            }
-        //            return;
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            await TaskEx.Delay(100);
-        //        }
+        private bool _IsConnected;
 
+        public bool IsConnected
+        {
+            get => _IsConnected;
+            set
+            {
+                if (value == _IsConnected) return;
+                _IsConnected = value;
+                OnPropertyChanged(nameof(IsConnected));
+            }
+        }
 
-        //}
+        private async void _FindServer()
+        {
+            while (true)
+                try
+                {
+                    if (_ServerEndPoint == null || (DateTime.Now - _LastPing).TotalSeconds > 7)
+                    {
+                        _ServerEndPoint = null;
+                        var start = DateTime.Now;
+                        PeerDiscovery.DiscoverPeersAsync(PeerDiscovery.DiscoveryMethod.UDPBroadcast);
+                        while ((DateTime.Now - start).TotalSeconds < 7)
+                        {
+                            if (_ServerEndPoint != null)
+                                break;
+                            await Task.Delay(777);
+                        }
+
+                        if (_ServerEndPoint == null)
+                            IsConnected = false;
+                    }
+
+                    await Task.Delay(777);
+                }
+                catch (Exception e)
+                {
+                    await Task.Delay(100);
+                }
+        }
 
         public async Task<LoginResult> Login(string username, string password)
         {
-            var pwd = new PasswordHash(password);
+            IsConnected = true;
             var login = new Login
             {
                 Username = username,
-                Password = pwd.ToArray()
+                Password = password
             };
             LoginResult result = null;
 

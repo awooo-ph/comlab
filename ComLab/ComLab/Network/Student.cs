@@ -11,7 +11,7 @@ namespace ComLab.Network
         public Student() { }
 
         private string _Firstname;
-
+        [ProtoMember(1)]
         public string Firstname
         {
             get => _Firstname;
@@ -24,7 +24,7 @@ namespace ComLab.Network
         }
 
         private string _Lastname;
-
+        [ProtoMember(2)]
         public string Lastname
         {
             get => _Lastname;
@@ -37,7 +37,7 @@ namespace ComLab.Network
         }
 
         private string _Course;
-
+        [ProtoMember(3)]
         public string Course
         {
             get => _Course;

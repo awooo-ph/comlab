@@ -18,9 +18,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Network\Login.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Network\LogonInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Network\Packet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\Ping.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Network\ServerInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\Student.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Network\Utility.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PasswordHash.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />
   </ItemGroup>
 </Project>

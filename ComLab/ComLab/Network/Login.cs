@@ -8,7 +8,7 @@ namespace ComLab.Network
         [ProtoMember(1)]
         public string Username { get; set; }
         [ProtoMember(2)]
-        public byte[] Password { get; set; }
+        public string Password { get; set; }
     }
 
     [ProtoContract]

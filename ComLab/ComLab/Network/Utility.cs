@@ -9,6 +9,8 @@ namespace ComLab.Network
 {
     static class Utility
     {
+        internal const string PSK = "awooo";
+
         public static IPAddress GetBroadcastAddress(this IPAddress address, IPAddress subnetMask)
         {
             byte[] ipAdressBytes = address.GetAddressBytes();

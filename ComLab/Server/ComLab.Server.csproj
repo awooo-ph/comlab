@@ -90,12 +90,13 @@
     <Compile Include="Dialogs\MessageDialog.xaml.cs">
       <DependentUpon>MessageDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Network\LoginHandler.cs" />
     <Compile Include="Network\Server.cs" />
+    <Compile Include="PasswordHash.cs" />
     <Compile Include="ViewModels\Classes.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MenuItem.cs" />
     <Compile Include="ViewModels\Students.cs" />
-    <Compile Include="ViewModels\Terminal.cs" />
     <Compile Include="ViewModels\Terminals.cs" />
     <Compile Include="Views\Classes.xaml.cs">
       <DependentUpon>Classes.xaml</DependentUpon>

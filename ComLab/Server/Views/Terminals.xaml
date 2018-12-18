@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ComLab.Views"
              mc:Ignorable="d" 
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewModels="clr-namespace:ComLab.ViewModels"
              d:DesignHeight="450" d:DesignWidth="800">
   <Grid>
     <Grid.RowDefinitions>
@@ -24,37 +25,57 @@
 
     <DataGrid ItemsSource="{Binding Items}"
               Grid.Row="1"
-              IsReadOnly="True"
               CanUserAddRows="False"
               FrozenColumnCount="1"
               AutoGenerateColumns="False">
       <DataGrid.Columns>
-        <DataGridTemplateColumn>
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <StackPanel Orientation="Horizontal">
-                <Button Style="{StaticResource MaterialDesignToolButton}"
-                        Height="Auto" ToolTip="Restart"
-                        Content="{md:PackIcon Restart}"/>
-                <Button Style="{StaticResource MaterialDesignToolButton}"
-                        Height="Auto" ToolTip="Shutdown"
-                        Content="{md:PackIcon Shutdown}"/>
-                <Button Style="{StaticResource MaterialDesignToolButton}"
-                        Height="Auto" ToolTip="Lock"
-                        Content="{md:PackIcon Lock}"/>
-              </StackPanel>
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
+        <DataGridCheckBoxColumn Binding="{Binding IsSelected}" 
+                                ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}"/>
         <DataGridTextColumn Header="NAME" 
                             Binding="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"/>
         <DataGridTextColumn Header="IP ADDRESS" 
+                            IsReadOnly="True"
                             Binding="{Binding IP,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"/>
         <DataGridTextColumn Header="USER" 
-                            Binding="{Binding IP,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"/>
+                            IsReadOnly="True"
+                            Binding="{Binding Student.Fullname,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"/>
+        <DataGridTextColumn Header="STATUS"
+                            Binding="{Binding Status}"
+                            IsReadOnly="True"/>
       </DataGrid.Columns>
     </DataGrid>
 
-    
+    <UniformGrid Grid.Row="2"
+                 Margin="15 20"
+                 Rows="1">
+      <Button Margin="5 0 10 0"
+              Command="{Binding ShutdownCommand}"
+              Style="{StaticResource MaterialDesignRaisedLightButton}">
+        <StackPanel Orientation="Horizontal">
+          <md:PackIcon Kind="Shutdown"/>
+          <TextBlock Text="  SHUTDOWN"
+                     VerticalAlignment="Center"/>
+        </StackPanel>
+      </Button>
+      <Button Margin="10 0"
+              Command="{Binding RestartCommand}"
+              Style="{StaticResource MaterialDesignRaisedLightButton}">
+        <StackPanel Orientation="Horizontal">
+          <md:PackIcon Kind="Restart"/>
+          <TextBlock Text="  RESTART"
+                     VerticalAlignment="Center"/>
+        </StackPanel>
+      </Button>
+      <Button Margin="10 0 5 0"
+              Command="{Binding LockCommand}"
+              Style="{StaticResource MaterialDesignRaisedLightButton}">
+        <StackPanel Orientation="Horizontal">
+          <md:PackIcon Kind="Lock"/>
+          <TextBlock Text="  LOCK"
+                     VerticalAlignment="Center"/>
+        </StackPanel>
+      </Button>
+    </UniformGrid>
   </Grid>
 </UserControl>

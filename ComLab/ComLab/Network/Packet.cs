@@ -21,6 +21,11 @@ namespace ComLab.Network
             return Header;
         }
 
+        public Task Send(EndPoint ep)
+        {
+            return Send(ep as IPEndPoint);
+        }
+
         public async Task Send(IPEndPoint ep)
         {
             if (ep == null) return;

@@ -16,13 +16,14 @@ namespace ComLab
         {
             InitializeComponent();
             DataContext = MainViewModel.Instance;
+            Server.Start();
         }
 
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
             Core.Context = SynchronizationContext.Current;
-            Server.Start();
+           
         }
 
     }
