@@ -30,8 +30,15 @@ namespace ComLab.ViewModels
             {
                 if (_items != null) return _items;
                 _items = (ListCollectionView) CollectionViewSource.GetDefaultView(Cache);
+                _items.Filter = Filter;
                 return _items;
             }
+        }
+
+        private bool Filter(object obj)
+        {
+            if (!(obj is Class c)) return false;
+            return c.InstructorId == MainViewModel.Instance.CurrentUser?.Id;
         }
 
         private ICommand _addClassCommand;
@@ -42,6 +49,14 @@ namespace ComLab.ViewModels
             c.InstructorId = MainViewModel.Instance.CurrentUser.Id;
             c.Save();
             Cache.Add(c);
+            Items.MoveCurrentTo(c);
         }));
+
+        public void Refresh()
+        {
+            Items.Refresh();
+            if (Items.CurrentItem == null)
+                Items.MoveCurrentToFirst();
+        }
     }
 }

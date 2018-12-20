@@ -107,7 +107,7 @@
       <ListBox.ItemContainerStyle>
         <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
           <Setter Property="Padding" Value="0"/>
-          <Setter Property="IsEnabled" Value="{Binding IsHeader,Converter={converters:Inverter}}"/>
+          <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
           <Setter Property="IsHitTestVisible" Value="{Binding IsHeader,Converter={converters:Inverter}}"/>
           <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
           <Setter Property="Cursor" Value="Hand"/>
@@ -134,6 +134,8 @@
                        VerticalAlignment="Top" SnapsToDevicePixels="True"
                        Visibility="{Binding IsHeader,Converter={converters:BooleanToVisibility}}"/>
             <Button Style="{StaticResource MaterialDesignToolButton}"
+                    Focusable="False"
+                    IsTabStop="False"
                     Visibility="{Binding IsSelectable,Converter={converters:BooleanToVisibility Collapsed,Visible}}"
                     Command="{Binding Command}"
                     Height="Auto"/>

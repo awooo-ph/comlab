@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using ComLab.Models;
 using ComLab.ViewModels;
@@ -43,7 +41,7 @@ namespace ComLab.Network
 
         private void PongHandler(PacketHeader packetheader, Connection connection, Pong pong)
         {
-            var terminal = Server.Clients.FirstOrDefault(x => x.IP == ((IPEndPoint) connection.ConnectionInfo.RemoteEndPoint).Address.ToString());
+            var terminal = Clients.FirstOrDefault(x => x.IP == ((IPEndPoint) connection.ConnectionInfo.RemoteEndPoint).Address.ToString());
             if (terminal == null) return;
             terminal.LastHeartbeat = DateTime.Now;
             if (terminal.Status == TerminalStatus.Offline)
@@ -51,33 +49,38 @@ namespace ComLab.Network
         }
 
        
-        private void LogonInfoHandler(PacketHeader packetheader, Connection connection, LogonInfo info)
+        private async void LogonInfoHandler(PacketHeader packetheader, Connection connection, LogonInfo info)
         {
+            var classInfo = MainViewModel.GetCurrentClass();
+            var clientInfo = new ClientInfo();
             lock (_terminalsLock)
             {
-                var terminal = Server.Clients.FirstOrDefault(x => x.IP == info.IP);
+                var terminal = Clients.FirstOrDefault(x => x.IP == info.IP);
                 if (terminal == null)
                 {
                     terminal = new Terminal
                     {
                         IP = info.IP,
-                        Name = info.ComputerName,
+                        Name = info.ComputerName
                     };
                     terminal.Save();
-                    Core.Context?.Post(d => { Server.Clients.Add(terminal); }, null);
+                    Core.Context?.Post(d => { Clients.Add(terminal); }, null);
                 }
 
-                terminal.EndPoint = new IPEndPoint(IPAddress.Parse(info.IP), info.Port);
+                clientInfo.ComputerName = terminal.Name;
+                terminal.LogonEndPoint = new IPEndPoint(IPAddress.Parse(info.IP), info.Port);
                 terminal.Status = TerminalStatus.Locked;
                 terminal.LastHeartbeat = DateTime.Now;
             }
 
+            await clientInfo.Send(connection.ConnectionInfo.RemoteEndPoint);
+            await classInfo.Send(connection.ConnectionInfo.RemoteEndPoint);
         }
         
         private static Server _instance;
         public static Server Instance => _instance ?? (_instance = new Server());
 
-        private bool _started = false;
+        private bool _started;
         private async void _Start()
         {
             if (_started) return;
@@ -111,9 +114,9 @@ namespace ComLab.Network
         {
             while (true)
             {
-                foreach (var terminal in Server.Clients)
+                foreach (var terminal in Clients)
                 {
-                    if (terminal.EndPoint == null) continue;
+                    if (!terminal.HasEndPoint) continue;
                     if ((DateTime.Now - terminal.LastHeartbeat).TotalSeconds < 7)
                     {
                         if (terminal.Status == TerminalStatus.Offline)
@@ -128,12 +131,23 @@ namespace ComLab.Network
                     terminal.PingId++;
                     var ping = new Ping
                     {
-                        Id = terminal.PingId,
+                        Id = terminal.PingId
                     };
-                    await ping.Send(terminal.EndPoint);
+                    await ping.Send(terminal.LogonEndPoint);
+                    await ping.Send(terminal.IpEndPoint);
                 }
 
                 await Task.Delay(7777);
+            }
+        }
+
+        public static async void Broadcast<T>(Packet<T> packet) where T:Packet<T>
+        {
+            foreach (var terminal in Clients)
+            {
+                if (!terminal.HasEndPoint || !terminal.Enabled) continue;
+                await packet.Send(terminal.LogonEndPoint);
+                await packet.Send(terminal.IpEndPoint);
             }
         }
     }

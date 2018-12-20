@@ -20,18 +20,5 @@ namespace ComLab.Network
         public bool Success { get; set; }
         [ProtoMember(3)]
         public Student Student { get; set; }
-
-
-    }
-
-    [ProtoContract]
-    class ClassInfo
-    {
-        [ProtoMember(1)]
-        public string ClassName { get; set; }
-        [ProtoMember(2)]
-        public string Schedule { get; set; }
-        [ProtoMember(3)]
-        public string Instructor { get; set; }
     }
 }

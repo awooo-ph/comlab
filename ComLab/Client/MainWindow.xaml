@@ -15,53 +15,85 @@
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        Background="{StaticResource PrimaryHueDarkBrush}"
+        Background="Black"
         ShowInTaskbar="False"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:network="clr-namespace:ComLab.Network"
         Title="ComLab 2019" MinWidth="555" MinHeight="222">
     <Grid>
     <md:Transitioner SelectedIndex="{Binding PageIndex}">
+      <md:Transitioner.Resources>
+        <Style TargetType="md:TransitionerSlide">
+          <Setter Property="BackwardWipe">
+            <Setter.Value>
+              <md:FadeWipe/>
+            </Setter.Value>
+          </Setter>
+          <Setter Property="ForwardWipe">
+            <Setter.Value>
+              <md:FadeWipe/>
+            </Setter.Value>
+          </Setter>
+        </Style>
+      </md:Transitioner.Resources>
+      <!--CLASS LOGIN-->
       <md:TransitionerSlide>
-        <md:ColorZone Mode="Standard" md:ShadowAssist.ShadowDepth="Depth4" CornerRadius="7"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      Margin="74">
-          <Grid>
-
-          </Grid>
-        </md:ColorZone>
-      </md:TransitionerSlide>
-      <md:TransitionerSlide>
-      <md:ColorZone Mode="Standard" md:ShadowAssist.ShadowDepth="Depth4" CornerRadius="7"
+        <Grid Background="{StaticResource PrimaryHueDarkBrush}">
+          <md:ColorZone VerticalAlignment="Top"
+                        Mode="PrimaryDark"
+                HorizontalAlignment="Center">
+            
+          <StackPanel Grid.Column="1"
+                      Margin="20">
+            <TextBlock Text="{Binding ClassTitle}"
+                       HorizontalAlignment="Center"
+                       FontSize="33pt"
+                       Style="{StaticResource MaterialDesignHeadlineTextBlock}"/>
+            <TextBlock Text="{Binding Schedule}"
+                       FontSize="22pt"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+            <TextBlock Text="{Binding Instructor}"
+                       FontSize="17pt"
+                       HorizontalAlignment="Center"
+                       FontWeight="Bold"/>
+            <TextBlock Text="{Binding WelcomeMessage}"
+                       Style="{StaticResource MaterialDesignTitleTextBlock}"
+                       Margin="0 20 0 30"
+                       TextWrapping="Wrap" TextAlignment="Center"/>
+          </StackPanel>
+          </md:ColorZone>
+          <md:ColorZone Mode="Standard" md:ShadowAssist.ShadowDepth="Depth4" CornerRadius="7"
                   HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
+                  VerticalAlignment="Bottom"
                   Margin="74">
-      <Grid DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}"
+            <Grid DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}"
             IsEnabled="{Binding Source={x:Static network:Client.Instance},Path=IsConnected}">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="*"/>
-          <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Image Source="norsu.png" Height="147" Width="147"
-               RenderOptions.BitmapScalingMode="HighQuality"
-               VerticalAlignment="Center"
-               Margin="20 20"/>
-        <StackPanel Grid.Column="1" Margin="20 40 40 40"
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+              <md:PackIcon Kind="ShieldKey" Height="147" Width="147"
+                     Grid.Row="0"
+                     Grid.Column="0"
+                     RenderOptions.BitmapScalingMode="HighQuality"
+                     VerticalAlignment="Center"
+                     Margin="20 20"/>
+              <StackPanel Grid.Column="1" Margin="20 40 40 40"
                     Grid.Row="0">
-          <TextBox md:TextFieldAssist.RippleOnFocusEnabled="True"
+              <TextBox md:TextFieldAssist.RippleOnFocusEnabled="True"
                    md:TextFieldAssist.HasFilledTextField="True"
                    md:HintAssist.IsFloating="True"
                    Width="222"
                    Margin="0 0 0 7"
                    Text="{Binding Username,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                    md:TextFieldAssist.TextFieldCornerRadius="7"
-                   md:HintAssist.Hint="USERNAME"/>
-          <PasswordBox md:TextFieldAssist.RippleOnFocusEnabled="True"
+                   md:HintAssist.Hint="STUDENT ID"/>
+              <PasswordBox md:TextFieldAssist.RippleOnFocusEnabled="True"
                        Width="222"
                        Margin="0 7 0 0"
                    md:TextFieldAssist.HasFilledTextField="True"
@@ -69,17 +101,109 @@
                        x:Name="PasswordBox" x:FieldModifier="private"
                    md:TextFieldAssist.TextFieldCornerRadius="7"
                    md:HintAssist.Hint="PASSWORD"/>
-        </StackPanel>
-        <Button Grid.Row="1" Grid.Column="1"
+            </StackPanel>
+            <Button Grid.Row="1" Grid.Column="1"
                 IsDefault="True"
                 Margin="20"
                 Command="{Binding LoginCommand}"
                 CommandParameter="{Binding ElementName=PasswordBox}"
                 HorizontalAlignment="Right"
                 Content="_LOGIN"/>
-      </Grid>
-    </md:ColorZone>
+          </Grid>
+        </md:ColorZone>
+        </Grid>
+      </md:TransitionerSlide>
+
+      <!--NO INSTRUCTOR-->
+      <md:TransitionerSlide>
+        <Grid Background="{StaticResource MaterialDesignDarkBackground}">
+        <md:ColorZone Mode="PrimaryDark" md:ShadowAssist.ShadowDepth="Depth4" CornerRadius="7"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center">
+          <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <md:PackIcon Kind="Hourglass" Height="74" Width="74" Margin="10"/>
+            <TextBlock Text="WAITING FOR INSTRUCTOR"
+                       FontSize="33pt"
+                       Grid.Column="1"
+                       VerticalAlignment="Center"
+                       Margin="0 0 20 0"/>
+          </Grid>
+        </md:ColorZone>
+        </Grid>
+      </md:TransitionerSlide>
+      <!--CONNECTING-->
+      <md:TransitionerSlide>
+        
+        <Grid>
+        <md:ColorZone Mode="PrimaryDark" md:ShadowAssist.ShadowDepth="Depth4" CornerRadius="7"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center">
+          <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" 
+                         IsIndeterminate="True"
+                         Height="74" Width="74" Margin="10"/>
+            <md:PackIcon Kind="LanConnect" Height="47" Width="47"
+                         VerticalAlignment="Center"
+                         Grid.Column="0"
+                         HorizontalAlignment="Center"/>
+
+            <TextBlock Text="Connecting to Server..."
+                       FontSize="22pt"
+                       Grid.Column="1"
+                       VerticalAlignment="Center"
+                       Margin="10"/>
+          </Grid>
+        
+        </md:ColorZone>
+        </Grid>
+      </md:TransitionerSlide>
+
+      <!--NO CLASS-->
+      <md:TransitionerSlide>
+        <Grid Background="{StaticResource MaterialDesignDarkBackground}">
+          <md:ColorZone Mode="PrimaryLight" md:ShadowAssist.ShadowDepth="Depth4" CornerRadius="7"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+            <Grid Margin="10">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <md:PackIcon Kind="Teaching" Height="74" Width="74" Margin="10"/>
+              <TextBlock Text="CLASS HAS NOT STARTED"
+                         FontSize="33pt"
+                         Grid.Column="1"
+                         VerticalAlignment="Center"
+                         Margin="0 0 20 0"/>
+            </Grid>
+          </md:ColorZone>
+        </Grid>
       </md:TransitionerSlide>
     </md:Transitioner>
+      <TextBlock Text="{Binding ComputerName}" Margin="20 10"
+                 VerticalAlignment="Top"
+                 HorizontalAlignment="Left"
+                 FontSize="47pt"
+                 Foreground="White"/>
+    <StackPanel HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Margin="10"
+                Opacity="0.7"
+                  VerticalAlignment="Bottom">
+      <TextBlock Text="ComLab Manager " FontWeight="Bold"
+                 Foreground="White"/>
+      <Rectangle Fill="White" Opacity="0.7"
+                 Width="1"/>
+      <TextBlock Text=" BSCS 2019"
+                 Foreground="White"/>
+    </StackPanel>
   </Grid>
 </Window>

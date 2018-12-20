@@ -62,8 +62,19 @@ namespace ComLab.ViewModels
             }
         }
 
+        private bool _IsEnabled = true;
 
-
+        public bool IsEnabled
+        {
+            get => !IsHeader && _IsEnabled;
+            set
+            {
+                if (value == _IsEnabled) return;
+                _IsEnabled = value;
+                OnPropertyChanged(nameof(IsEnabled));
+            }
+        }
+        
         private bool _IsSelectable = true;
 
         public bool IsSelectable

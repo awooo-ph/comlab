@@ -22,6 +22,14 @@ namespace ComLab.Network
                     return;
                 }
 
+                if (MainViewModel.Instance.ClassSession == null)
+                {
+                    result.Success = false;
+                    result.Message = "CLASS HAS NOT YET STARTED";
+                    await result.Send(connection.ConnectionInfo.RemoteEndPoint as IPEndPoint);
+                    return;
+                }
+
                 var terminal = Clients.FirstOrDefault(x => x.IP == ((IPEndPoint)connection.ConnectionInfo.RemoteEndPoint).Address.ToString());
                 if (terminal == null)
                 {

@@ -11,11 +11,11 @@ using ProtoBuf;
 
 namespace ComLab.Network
 {
-    [ProtoContract]
+  [ProtoContract]
     abstract class Packet<T>:ViewModelBase where T : Packet<T>
     {
-        public static string Header => typeof(T).Name;
-
+        public static string Header => typeof(T).FullName;
+        
         public override string ToString()
         {
             return Header;
@@ -45,6 +45,5 @@ namespace ComLab.Network
                 }
             }
         }
-
     }
 }

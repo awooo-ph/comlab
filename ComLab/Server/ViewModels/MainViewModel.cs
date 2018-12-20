@@ -9,6 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using ComLab.Dialogs;
 using ComLab.Models;
+using ComLab.Network;
 using MaterialDesignExtensions.Model;
 using MaterialDesignThemes.Wpf;
 
@@ -16,17 +17,28 @@ namespace ComLab.ViewModels
 {
     class MainViewModel:ViewModelBase
     {
-        
+        private MenuItem ClassManager => new MenuItem
+        {
+            Title = "CLASS MANAGER",
+            Command = new DelegateCommand(d => { PageContent = Students.Instance; }),
+            IsSelected = true
+        };
+
+        private MenuItem StartClassMenu => new MenuItem
+        {
+            Title = "START CLASS",
+            Command = new DelegateCommand(d =>
+            {
+                Core.Post(()=>{
+                    StartClass();
+                    ClassManager.IsSelected = true;
+                });
+            }),
+            IsSelectable = false
+        };
 
         private MainViewModel()
         {
-            var ClassManager = new MenuItem
-            {
-                Title = "CLASS MANAGER",
-                Command = new DelegateCommand(d => { PageContent = Students.Instance; }),
-                IsSelected = true
-            };
-
             MenuItems = new List<MenuItem>
             {
                 ClassManager,
@@ -58,17 +70,7 @@ namespace ComLab.ViewModels
                         }),
                     IsSelectable = false
                 },
-                new MenuItem
-                {
-                    Title = "START CLASS",
-                    Command = new DelegateCommand(d=>
-                    {
-                        StartClass();
-                        ClassManager.IsSelected = true;
-                    }),
-                    IsSelectable = false
-                },
-
+                StartClassMenu,
                 new MenuItem {Title = "ADMINISTRATION", IsHeader = true},
                 new MenuItem
                 {
@@ -92,9 +94,52 @@ namespace ComLab.ViewModels
             }; 
         }
 
-        private void StartClass()
+        private ClassSession _ClassSession;
+
+        public ClassSession ClassSession
         {
-            
+            get => _ClassSession;
+            set
+            {
+                if (value == _ClassSession) return;
+                _ClassSession = value;
+                OnPropertyChanged(nameof(ClassSession));
+                StartClassMenu.IsEnabled = value == null;
+                OnPropertyChanged(nameof(ClassStarted));
+            }
+        }
+
+        public bool ClassStarted => ClassSession != null;
+        
+        private async void StartClass()
+        {
+            var c = ((Class)Classes.Instance.Items.CurrentItem);
+            if (ClassSession != null || c==null) return;
+   
+             var   message = await StartClassDialog.Show(c.Title);
+   
+            if (message == null) return;
+
+            ClassSession = new ClassSession()
+            {
+                ClassId = c.Id,
+                Started = DateTime.Now,
+                Message = message
+            };
+            ClassSession.Save();
+
+            var classInfo = new ClassInfo
+            {
+                ClassName = c.Title,
+                Schedule = c.Schedule,
+                Instructor = CurrentUser.Fullname,
+                WelcomMessage = message,
+                ClassStarted = true,
+                HasInstructor = true,
+            };
+
+            Server.Broadcast(classInfo);
+
         }
 
         private async void AddNewStudent()
@@ -272,6 +317,12 @@ namespace ComLab.ViewModels
             CurrentUser = instructor;
             IsAuthenticated = true;
 
+            Server.Broadcast(new InstructorLogin
+            {
+                Fullname = instructor?.Fullname
+            });
+
+            Classes.Instance.Refresh();
             if (Classes.Instance.Items.Count == 0)
                 Classes.Instance.AddClassCommand.Execute(null);
         }));
@@ -283,5 +334,18 @@ namespace ComLab.ViewModels
 
         private static SnackbarMessageQueue _messageQueue;
         public static SnackbarMessageQueue MessageQueue => _messageQueue ?? (_messageQueue = new SnackbarMessageQueue());
+
+        public static ClassInfo GetCurrentClass()
+        {
+            return new ClassInfo
+            {
+                HasInstructor = Instance.CurrentUser!=null,
+                Instructor = Instance.CurrentUser?.Fullname,
+                ClassStarted = Instance.ClassSession!=null,
+                ClassName = Instance.ClassSession?.Class?.Title,
+                Schedule = Instance.ClassSession?.Class?.Schedule,
+                WelcomMessage = Instance.ClassSession?.Message
+            };
+        }
     }
 }

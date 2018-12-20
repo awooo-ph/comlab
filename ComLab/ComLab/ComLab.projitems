@@ -15,6 +15,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\EqualityToVisibility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\Inverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\IsNullConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\ClassInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Network\InstructorLogin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Network\Login.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Network\LogonInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Network\Packet.cs" />

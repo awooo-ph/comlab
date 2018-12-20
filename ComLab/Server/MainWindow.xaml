@@ -47,14 +47,18 @@
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
-        <mi:AppBar Title="ComLab Manager" ShowNavigationDrawerButton="{Binding PinMenu,Converter={converters:Inverter}}"
+          <mi:AppBar Title="ComLab Manager" ShowNavigationDrawerButton="{Binding PinMenu,Converter={converters:Inverter}}"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
                    IsNavigationDrawerOpen="{Binding IsMenuOpen, Mode=TwoWay}"
                    x:Name="AppBar" x:FieldModifier="private">
 
-        </mi:AppBar>
-
+          </mi:AppBar>
+          <md:PackIcon Kind="ComputerClassic" Height="47" Width="47" VerticalAlignment="Center"
+                       Foreground="{StaticResource PrimaryHueMidForegroundBrush}"
+                       Visibility="{Binding PinMenu,Converter={converters:BooleanToVisibility}}"
+                       HorizontalAlignment="Left"
+                       Margin="20 0 0 0"/>
           <md:DrawerHost Grid.Column="1"
                          Grid.Row="1"
                          Background="Transparent"

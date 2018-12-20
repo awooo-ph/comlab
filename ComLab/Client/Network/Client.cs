@@ -22,7 +22,7 @@ namespace ComLab.Network
             NetworkComms.DisableLogging();
             
             NetworkComms.IgnoreUnknownPacketTypes = true;
-            var serializer = DPSManager.GetDataSerializer<NetworkCommsDotNet.DPSBase.ProtobufSerializer>();
+            var serializer = DPSManager.GetDataSerializer<ProtobufSerializer>();
             NetworkComms.DefaultSendReceiveOptions.DataProcessors.Add(
                 DPSManager.GetDataProcessor<RijndaelPSKEncrypter>());
             NetworkComms.DefaultSendReceiveOptions = new SendReceiveOptions(serializer,
@@ -31,11 +31,12 @@ namespace ComLab.Network
             RijndaelPSKEncrypter.AddPasswordToOptions(NetworkComms.DefaultSendReceiveOptions.Options, Utility.PSK);
 
             NetworkComms.AppendGlobalIncomingPacketHandler<Ping>(Ping.Header, PingHandler);
-            
+            NetworkComms.AppendGlobalIncomingPacketHandler<ClassInfo>(ClassInfo.Header, ClassInfoHandler);
+            NetworkComms.AppendGlobalIncomingPacketHandler<InstructorLogin>(InstructorLogin.Header, InstructorLoginHandler);
+            NetworkComms.AppendGlobalIncomingPacketHandler<ClientInfo>(ClientInfo.Header, ClientInfoHandler);
             PeerDiscovery.EnableDiscoverable(PeerDiscovery.DiscoveryMethod.UDPBroadcast);
 
             PeerDiscovery.OnPeerDiscovered += OnPeerDiscovered;
-
 
             //NetworkComms.AppendGlobalIncomingPacketHandler<byte[]>("PartialFileData", IncomingPartialFileData);
 
@@ -46,6 +47,22 @@ namespace ComLab.Network
 
             PeerDiscovery.DiscoverPeersAsync(PeerDiscovery.DiscoveryMethod.UDPBroadcast);
 
+        }
+
+        private void ClientInfoHandler(PacketHeader packetheader, Connection connection, ClientInfo incomingobject)
+        {
+            MainViewModel.Instance.UpdateInfo(incomingobject);
+        }
+
+        private void InstructorLoginHandler(PacketHeader packetheader, Connection connection, InstructorLogin incomingobject)
+        {
+            MainViewModel.Instance.Instructor = incomingobject.Fullname;
+            MainViewModel.Instance.PageIndex = MainViewModel.NO_CLASS_INDEX;
+        }
+
+        private void ClassInfoHandler(PacketHeader packetheader, Connection connection, ClassInfo incomingobject)
+        {
+            MainViewModel.Instance.UpdateClassInfo(incomingobject);
         }
 
         private async void PingHandler(PacketHeader packetheader, Connection connection, Ping incomingobject)
@@ -99,15 +116,14 @@ namespace ComLab.Network
             while (true)
                 try
                 {
-                    if (_ServerEndPoint == null || (DateTime.Now - _LastPing).TotalSeconds > 7)
+                    if (_ServerEndPoint == null || (DateTime.Now - _LastPing).TotalSeconds > 47)
                     {
                         _ServerEndPoint = null;
                         var start = DateTime.Now;
                         PeerDiscovery.DiscoverPeersAsync(PeerDiscovery.DiscoveryMethod.UDPBroadcast);
                         while ((DateTime.Now - start).TotalSeconds < 7)
                         {
-                            if (_ServerEndPoint != null)
-                                break;
+                            if (_ServerEndPoint != null) break;
                             await Task.Delay(777);
                         }
 
@@ -147,6 +163,7 @@ namespace ComLab.Network
 
         private async void OnPeerDiscovered(ShortGuid peeridentifier, Dictionary<ConnectionType, List<EndPoint>> endPoints)
         {
+            
             var info = new LogonInfo();
             info.ComputerName = Environment.MachineName;
 
@@ -181,6 +198,9 @@ namespace ComLab.Network
                 }
 
             }
+
+            if(MainViewModel.Instance.PageIndex==MainViewModel.CONNECTING_INDEX)
+                MainViewModel.Instance.PageIndex = MainViewModel.INSTRUCTOR_INDEX;
         }
 
         /// <summary>

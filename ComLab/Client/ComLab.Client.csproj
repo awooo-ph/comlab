@@ -70,6 +70,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Core.cs" />
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="Network\Client.cs" />
     <Compile Include="Properties\Annotations.cs" />
