@@ -52,6 +52,15 @@ namespace ComLab.Network
                     return;
                 }
 
+                var client = Clients.FirstOrDefault(x => x.Student?.Id == student.Id);
+                if (client!=null)
+                {
+                    result.Success = false;
+                    result.Message = $"CURRENTLY LOGGED IN AT {client.Name}";
+                    await result.Send(connection.ConnectionInfo.RemoteEndPoint as IPEndPoint);
+                    return;
+                }
+
                 if (string.IsNullOrEmpty(student.Password)) student.Update(nameof(student.Password), login.Password);
 
                 if (student.Password != login.Password)

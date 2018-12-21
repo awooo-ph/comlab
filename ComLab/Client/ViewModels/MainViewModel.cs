@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ComLab.Network;
+using MaterialDesignThemes.Wpf;
 
 namespace ComLab.ViewModels
 {
@@ -106,10 +107,35 @@ namespace ComLab.ViewModels
 
         public ICommand LoginCommand => _loginCommand ?? (_loginCommand = new DelegateCommand<PasswordBox>(async d =>
         {
+            IsLoggingIn = true;
             var res = await Client.Instance.Login(Username, d.Password);
-            if (res == null) return;
-            MessageBox.Show(res.Message);
+            if (res?.Success??false)
+            {
+               Application.Current.Shutdown();
+            }
+            else
+            {
+                MessageQueue.Enqueue(res?.Message??"REQUEST TIMEOUT");
+            }
+
+            IsLoggingIn = false;
         }));
+
+        private bool _IsLoggingIn;
+
+        public bool IsLoggingIn
+        {
+            get => _IsLoggingIn;
+            set
+            {
+                if (value == _IsLoggingIn) return;
+                _IsLoggingIn = value;
+                OnPropertyChanged(nameof(IsLoggingIn));
+            }
+        }
+        
+        private SnackbarMessageQueue _messageQueue;
+        public SnackbarMessageQueue MessageQueue => _messageQueue ?? (_messageQueue = new SnackbarMessageQueue());
 
         private long _PageIndex = CONNECTING_INDEX;
 

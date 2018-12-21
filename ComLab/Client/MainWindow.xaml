@@ -67,25 +67,28 @@
                   HorizontalAlignment="Center"
                   VerticalAlignment="Bottom"
                   Margin="74">
-            <Grid DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}"
-            IsEnabled="{Binding Source={x:Static network:Client.Instance},Path=IsConnected}">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="Auto"/>
-              <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-              </Grid.RowDefinitions>
-              <md:PackIcon Kind="ShieldKey" Height="147" Width="147"
+            <Grid>
+
+
+              <Grid DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}"
+                    IsEnabled="{Binding IsLoggingIn,Converter={converters:Inverter}}">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="*"/>
+                  <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <md:PackIcon Kind="ShieldKey" Height="147" Width="147"
                      Grid.Row="0"
                      Grid.Column="0"
                      RenderOptions.BitmapScalingMode="HighQuality"
                      VerticalAlignment="Center"
                      Margin="20 20"/>
-              <StackPanel Grid.Column="1" Margin="20 40 40 40"
+                <StackPanel Grid.Column="1" Margin="20 40 40 40"
                     Grid.Row="0">
-              <TextBox md:TextFieldAssist.RippleOnFocusEnabled="True"
+                  <TextBox md:TextFieldAssist.RippleOnFocusEnabled="True"
                    md:TextFieldAssist.HasFilledTextField="True"
                    md:HintAssist.IsFloating="True"
                    Width="222"
@@ -93,7 +96,7 @@
                    Text="{Binding Username,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                    md:TextFieldAssist.TextFieldCornerRadius="7"
                    md:HintAssist.Hint="STUDENT ID"/>
-              <PasswordBox md:TextFieldAssist.RippleOnFocusEnabled="True"
+                  <PasswordBox md:TextFieldAssist.RippleOnFocusEnabled="True"
                        Width="222"
                        Margin="0 7 0 0"
                    md:TextFieldAssist.HasFilledTextField="True"
@@ -101,15 +104,30 @@
                        x:Name="PasswordBox" x:FieldModifier="private"
                    md:TextFieldAssist.TextFieldCornerRadius="7"
                    md:HintAssist.Hint="PASSWORD"/>
-            </StackPanel>
-            <Button Grid.Row="1" Grid.Column="1"
-                IsDefault="True"
-                Margin="20"
-                Command="{Binding LoginCommand}"
-                CommandParameter="{Binding ElementName=PasswordBox}"
-                HorizontalAlignment="Right"
-                Content="_LOGIN"/>
-          </Grid>
+                </StackPanel>
+                <Button Grid.Row="1" Grid.Column="1"
+                        IsDefault="True"
+                        Margin="20"
+                        Command="{Binding LoginCommand}"
+                        CommandParameter="{Binding ElementName=PasswordBox}"
+                        HorizontalAlignment="Right"
+                        Content="_LOGIN"/>
+                <ProgressBar Height="4" VerticalAlignment="Top"
+                           Grid.Row="1"
+                             Visibility="{Binding IsLoggingIn,Converter={converters:BooleanToVisibility}}"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           IsIndeterminate="True"/>
+                <md:Snackbar HorizontalAlignment="Left"
+                             Width="Auto"
+                             Margin="0"
+                             VerticalAlignment="Bottom"
+                             Grid.Column="0"
+                             Grid.ColumnSpan="2"
+                             Grid.Row="1"
+                             MessageQueue="{Binding MessageQueue}"/>
+              </Grid>
+            </Grid>
         </md:ColorZone>
         </Grid>
       </md:TransitionerSlide>
