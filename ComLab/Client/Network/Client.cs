@@ -51,18 +51,17 @@ namespace ComLab.Network
 
         private void ClientInfoHandler(PacketHeader packetheader, Connection connection, ClientInfo incomingobject)
         {
-            MainViewModel.Instance.UpdateInfo(incomingobject);
+            Messenger.Default.Broadcast(Messages.ClientInfoReceived,incomingobject);
         }
 
         private void InstructorLoginHandler(PacketHeader packetheader, Connection connection, InstructorLogin incomingobject)
         {
-            MainViewModel.Instance.Instructor = incomingobject.Fullname;
-            MainViewModel.Instance.PageIndex = MainViewModel.NO_CLASS_INDEX;
+            Messenger.Default.Broadcast(Messages.InstructorLogin, incomingobject);
         }
 
         private void ClassInfoHandler(PacketHeader packetheader, Connection connection, ClassInfo incomingobject)
         {
-            MainViewModel.Instance.UpdateClassInfo(incomingobject);
+            Messenger.Default.Broadcast(Messages.ClassInfo, incomingobject);
         }
 
         private async void PingHandler(PacketHeader packetheader, Connection connection, Ping incomingobject)
@@ -199,8 +198,7 @@ namespace ComLab.Network
 
             }
 
-            if(MainViewModel.Instance.PageIndex==MainViewModel.CONNECTING_INDEX)
-                MainViewModel.Instance.PageIndex = MainViewModel.INSTRUCTOR_INDEX;
+            Messenger.Default.Broadcast(Messages.ServerDiscovered);
         }
 
         /// <summary>

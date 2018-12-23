@@ -70,7 +70,7 @@
             <Grid>
 
 
-              <Grid DataContext="{Binding Source={x:Static viewModels:MainViewModel.Instance}}"
+              <Grid DataContext="{Binding Source={x:Static viewModels:LogonViewModel.Instance}}"
                     IsEnabled="{Binding IsLoggingIn,Converter={converters:Inverter}}">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="Auto"/>

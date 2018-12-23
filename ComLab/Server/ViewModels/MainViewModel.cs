@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -17,59 +19,41 @@ namespace ComLab.ViewModels
 {
     class MainViewModel:ViewModelBase
     {
-        private MenuItem ClassManager => new MenuItem
-        {
-            Title = "CLASS MANAGER",
-            Command = new DelegateCommand(d => { PageContent = Students.Instance; }),
-            IsSelected = true
-        };
-
-        private MenuItem StartClassMenu => new MenuItem
-        {
-            Title = "START CLASS",
-            Command = new DelegateCommand(d =>
-            {
-                Core.Post(()=>{
-                    StartClass();
-                    ClassManager.IsSelected = true;
-                });
-            }),
-            IsSelectable = false
-        };
+        private MenuItem ClassManager, StartClassMenu,EnrollStudentMenu,CreateClassMenu,EndClassMenu;
+        private Timer _clock;
 
         private MainViewModel()
         {
-            MenuItems = new List<MenuItem>
+            ClassManager = new MenuItem
+            {
+                Title = "CLASS MANAGER",
+                Command = new DelegateCommand(d => { PageContent = Students.Instance; }),
+                IsSelected = true
+            };
+            StartClassMenu = new MenuItem
+            {
+                Title = "START CLASS",
+                Command = new DelegateCommand(StartClass),
+                IsSelectable = false
+            };
+            EnrollStudentMenu = new MenuItem
+            {
+                Title = "ENROLL STUDENT",
+                Command = new DelegateCommand(EnrollStudent),
+                IsSelectable = false
+            };
+            CreateClassMenu = new MenuItem
+            {
+                Title = "CREATE NEW CLASS",
+                Command = new DelegateCommand(CreateClass),
+                IsSelectable = false
+            };
+
+            MenuItems = new ObservableCollection<MenuItem>
             {
                 ClassManager,
-                new MenuItem
-                {
-                    Title = "ENROLL STUDENT",
-                    Command = new DelegateCommand(d=>
-                    {
-                        if (Classes.Instance.Items.Count == 0)
-                        {
-                            Classes.Instance.AddClassCommand.Execute(null);
-                            Classes.Instance.Items.MoveCurrentToFirst();
-                        }
-
-                        if (Classes.Instance.Items.CurrentItem == null) return;
-
-                        AddNewStudent();
-                        ClassManager.IsSelected = true;
-                    }),
-                    IsSelectable = false
-                },
-                new MenuItem
-                {
-                    Title = "CREATE NEW CLASS",
-                    Command = new DelegateCommand(d=>
-                        {
-                            Classes.Instance.AddClassCommand.Execute(null);
-                            ClassManager.IsSelected = true;
-                        }),
-                    IsSelectable = false
-                },
+                EnrollStudentMenu,
+                CreateClassMenu,
                 StartClassMenu,
                 new MenuItem {Title = "ADMINISTRATION", IsHeader = true},
                 new MenuItem
@@ -92,6 +76,31 @@ namespace ComLab.ViewModels
                 },
                 
             }; 
+
+            _clock = new Timer(1000);
+            _clock.AutoReset = true;
+            _clock.Elapsed += (sender, args) => OnPropertyChanged(nameof(CurrentTime));
+            _clock.Start();
+        }
+
+        private void EnrollStudent(object obj)
+        {
+            if (Classes.Instance.Items.Count == 0)
+            {
+                Classes.Instance.AddClassCommand.Execute(null);
+                Classes.Instance.Items.MoveCurrentToFirst();
+            }
+
+            if (Classes.Instance.Items.CurrentItem == null) return;
+
+            AddNewStudent();
+            ClassManager.IsSelected = true;
+        }
+
+        private void CreateClass(object obj)
+        {
+            Classes.Instance.AddClassCommand.Execute(null);
+            ClassManager.IsSelected = true;
         }
 
         private ClassSession _ClassSession;
@@ -109,9 +118,22 @@ namespace ComLab.ViewModels
             }
         }
 
+        private ICommand _EndClassCommand;
+        public ICommand EndClassCommand => _EndClassCommand ?? (_EndClassCommand = new DelegateCommand(d =>EndClass()));
+
+        public void EndClass()
+        {
+            if (ClassSession == null) return;
+            ClassSession.Ended = DateTime.Now;
+            ClassSession.Save();
+            ClassSession = null;
+            StartClassMenu.IsEnabled = true;
+            Server.Broadcast(new EndClass());
+        }
+
         public bool ClassStarted => ClassSession != null;
-        
-        private async void StartClass()
+
+        private async void StartClass(object obj)
         {
             var c = ((Class)Classes.Instance.Items.CurrentItem);
             if (ClassSession != null || c==null) return;
@@ -138,8 +160,24 @@ namespace ComLab.ViewModels
                 HasInstructor = true,
             };
 
-            Server.Broadcast(classInfo);
+            //foreach (var item in Classes.Cache)
+            //{
+            //    if (item.Id == c.Id) continue;
+            //    item.IsEnabled = false;
+            //}
 
+            StartClassMenu.IsEnabled = false;
+            Server.Broadcast(classInfo);
+            ClassManager.IsSelected = true;
+        }
+
+        public string CurrentTime
+        {
+            get
+            {
+                var t = (DateTime.Now - ClassSession.Started);
+                return $"{t.Hours:00}:{t.Minutes:00}:{t.Seconds:00}";
+            }
         }
 
         private async void AddNewStudent()
@@ -209,7 +247,7 @@ namespace ComLab.ViewModels
             }
         }
         
-        public List<MenuItem> MenuItems { get; }
+        public ObservableCollection<MenuItem> MenuItems { get; }
         
         private bool _IsMenuOpen;
 

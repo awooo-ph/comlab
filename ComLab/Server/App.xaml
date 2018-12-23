@@ -58,9 +58,9 @@
 
         <!-- accent color -->
         <ResourceDictionary>
-          <!--<ResourceDictionary.MergedDictionaries>
-            <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Lime.xaml" />
-          </ResourceDictionary.MergedDictionaries>-->
+          <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Red.xaml" />
+          </ResourceDictionary.MergedDictionaries>
           <SolidColorBrush x:Key="SecondaryAccentBrush" Color="{StaticResource Accent700}"/>
           <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="{StaticResource Accent700Foreground}"/>
         </ResourceDictionary>
@@ -74,13 +74,14 @@
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="IsEnabled" Value="{Binding IsEnabled}"/>
         <Setter Property="Template">
           <Setter.Value>
             <ControlTemplate TargetType="{x:Type ListBoxItem}">
               <Border Background="Transparent"
                       x:Name="Border"
-                      BorderBrush="#a8adac"
-                      BorderThickness="0 0 0 1"
+                      SnapsToDevicePixels="True"
                             ClipToBounds="{TemplateBinding ClipToBounds}">
                 <VisualStateManager.VisualStateGroups>
                   <VisualStateGroup Name="CommonStates">
@@ -94,7 +95,8 @@
                     <VisualState Name="Normal"/>
                     <VisualState Name="MouseOver">
                       <Storyboard>
-                        <DoubleAnimation Storyboard.TargetName="MouseOverBorder" Storyboard.TargetProperty="Opacity"
+                        <DoubleAnimation Storyboard.TargetName="MouseOverBorder" 
+                                         Storyboard.TargetProperty="Opacity"
                                                          To="0.1" Duration="0"/>
                       </Storyboard>
                     </VisualState>
@@ -104,14 +106,16 @@
                     <VisualStateGroup.Transitions>
                       <VisualTransition From="*" To="Selected">
                         <Storyboard>
-                          <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SelectedBackgroundBorder">
+                          <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="SelectedBackgroundBorder">
                             <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
                           </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
                       </VisualTransition>
                       <VisualTransition From="*" To="SelectedUnfocused">
                         <Storyboard>
-                          <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SelectedBackgroundBorder">
+                          <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" 
+                                                         Storyboard.TargetName="SelectedBackgroundBorder">
                             <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
                           </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
@@ -148,6 +152,7 @@
                   </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
                 <Grid>
+                  
                   <Border x:Name="MouseOverBorder"
                                     Opacity="0"
                                     Background="{TemplateBinding Foreground}"/>
@@ -165,20 +170,33 @@
                                         SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                         HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        Padding="10">
+                                        Padding="6">
                   </md:Ripple>
-                  <Border x:Name="SelectedBorder"
+                  <Grid x:Name="SelectedBorder"
+                        IsHitTestVisible="False"
                                     Visibility="Visible"
-                          Margin="0 0 0 -1"
                                     Opacity="0"
-                                    BorderThickness="1 0"
-                                    BorderBrush="#a8adac" />
+                          SnapsToDevicePixels="True" >
+                    <Rectangle Height="4" Fill="{StaticResource PrimaryHueMidBrush}" VerticalAlignment="Bottom"
+                               Visibility="Visible"/>
+                    <Rectangle Width="1" Fill="#a8adac" HorizontalAlignment="Right"
+                               Margin="0 0 -1 0"
+                               IsHitTestVisible="False"/>
+                  </Grid>
+                  <Rectangle x:Name="BottomBorder" Height="1" Fill="#a8adac" VerticalAlignment="Bottom"
+                             IsHitTestVisible="False"
+                             Visibility="Visible"/>
+                  <Rectangle Width="1" Fill="#a8adac" HorizontalAlignment="Left"
+                             x:Name="SelectedLeftBorder"
+                             Opacity="0.2"
+                             IsHitTestVisible="False"/>
                 </Grid>
               </Border>
               <ControlTemplate.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                   <Setter TargetName="Ripple" Property="Opacity" Value=".92" />
-                  <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                  <Setter TargetName="Ripple" Property="Padding" Value="6 6 6 10" />
+                  <Setter TargetName="SelectedLeftBorder" Property="Opacity" Value="1" />
                   <Setter TargetName="Border" Property="Background" Value="{StaticResource MaterialDesignPaper}"/>
                 </Trigger>
                 <Trigger Property="IsEnabled" Value="False">

@@ -96,6 +96,7 @@
     <Compile Include="Dialogs\StartClassDialog.xaml.cs">
       <DependentUpon>StartClassDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ListBoxHelper.cs" />
     <Compile Include="Network\LoginHandler.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="PasswordHash.cs" />
@@ -112,6 +113,9 @@
     </Compile>
     <Compile Include="Views\MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Session.xaml.cs">
+      <DependentUpon>Session.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Students.xaml.cs">
       <DependentUpon>Students.xaml</DependentUpon>
@@ -160,6 +164,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Session.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

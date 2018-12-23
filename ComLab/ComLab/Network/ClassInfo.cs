@@ -22,4 +22,7 @@ namespace ComLab.Network
         [ProtoMember(1)]
         public string ComputerName { get; set; }
     }
+
+    [ProtoContract]
+    class EndClass : Packet<EndClass> { }
 }

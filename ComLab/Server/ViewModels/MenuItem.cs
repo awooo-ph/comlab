@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ComLab.ViewModels
@@ -74,7 +75,23 @@ namespace ComLab.ViewModels
                 OnPropertyChanged(nameof(IsEnabled));
             }
         }
-        
+
+        private Visibility _Visibility = Visibility.Visible;
+
+        public Visibility Visibility
+        {
+            get
+            {
+                return _Visibility;
+            }
+            set
+            {
+                if (value == _Visibility) return;
+                _Visibility = value;
+                OnPropertyChanged(nameof(Visibility));
+            }
+        }
+
         private bool _IsSelectable = true;
 
         public bool IsSelectable

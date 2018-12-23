@@ -54,6 +54,56 @@
                    x:Name="AppBar" x:FieldModifier="private">
 
           </mi:AppBar>
+          <StackPanel Grid.Row="0"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Right"
+                      Orientation="Horizontal"
+                        Grid.Column="1">
+            <md:ColorZone Mode="Dark" VerticalAlignment="Stretch"
+                          Height="Auto"
+                          Visibility="{Binding ClassStarted,Converter={converters:BooleanToVisibility}}"
+                          md:ShadowAssist.ShadowDepth="Depth2"
+                          md:ShadowAssist.ShadowEdges="Left"
+                          BorderThickness="0 0 0 0" BorderBrush="{StaticResource PrimaryHueMidForegroundBrush}">
+              <Grid VerticalAlignment="Center" Margin="20 0">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <md:PackIcon Kind="Teacher" Height="47" Width="47"/>
+                <StackPanel Grid.Column="1" Margin="20 0">
+                  <TextBlock Style="{StaticResource MaterialDesignHeadlineTextBlock}"
+                             TextAlignment="Center">
+                  <Run Text="{Binding ClassSession.Class.Title}"/>
+                  </TextBlock>
+                  <TextBlock Text="{Binding CurrentTime}"
+                             Opacity="0.7" TextAlignment="Center"
+                           Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
+                </StackPanel>
+                <Button VerticalAlignment="Center"
+                        Grid.Column="2"
+                        Command="{Binding EndClassCommand}"
+                        Margin="20 0 0 0"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Content="END CLASS">
+                  <Button.Resources>
+                    <ResourceDictionary>
+                      <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Red.xaml" />
+                      </ResourceDictionary.MergedDictionaries>
+                      <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary200}"/>
+                      <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary200Foreground}"/>
+                      <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary700}"/>
+                      <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary700Foreground}"/>
+                      <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary900}"/>
+                      <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary900Foreground}"/>
+                    </ResourceDictionary>
+                  </Button.Resources>
+                </Button>
+              </Grid>
+            </md:ColorZone>
+          </StackPanel>
           <md:PackIcon Kind="ComputerClassic" Height="47" Width="47" VerticalAlignment="Center"
                        Foreground="{StaticResource PrimaryHueMidForegroundBrush}"
                        Visibility="{Binding PinMenu,Converter={converters:BooleanToVisibility}}"

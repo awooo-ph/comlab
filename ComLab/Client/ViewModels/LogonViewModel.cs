@@ -7,19 +7,36 @@ using MaterialDesignThemes.Wpf;
 
 namespace ComLab.ViewModels
 {
-    class MainViewModel : ViewModelBase
+    class LogonViewModel : ViewModelBase
     {
-        public const long CONNECTING_INDEX = 2;
-        public const long INSTRUCTOR_INDEX = 1;
-        public const long LOGIN_INDEX = 0;
-        public const long NO_CLASS_INDEX = 3;
+        private const long CONNECTING_INDEX = 2;
+        private const long INSTRUCTOR_INDEX = 1;
+        private const long LOGIN_INDEX = 0;
+        private const long NO_CLASS_INDEX = 3;
 
-        private MainViewModel()
+        private LogonViewModel()
         {
+            Messenger.Default.AddListener<InstructorLogin>(Messages.InstructorLogin, login =>
+            {
+                Instructor = login.Fullname;
+                PageIndex = NO_CLASS_INDEX;
+            });
+            Messenger.Default.AddListener(Messages.ServerDiscovered, () =>
+            {
+                if (PageIndex == CONNECTING_INDEX)
+                    PageIndex = INSTRUCTOR_INDEX;
+            });
+            Messenger.Default.AddListener<ClientInfo>(Messages.ClientInfoReceived, info =>
+            {
+                ComputerName = info.ComputerName;
+                if (PageIndex == CONNECTING_INDEX)
+                    PageIndex = INSTRUCTOR_INDEX;
+            });
+            Messenger.Default.AddListener<ClassInfo>(Messages.ClassInfo, UpdateClassInfo);
         }
 
-        private static MainViewModel _instance;
-        public static MainViewModel Instance => _instance ?? (_instance = new MainViewModel());
+        private static LogonViewModel _instance;
+        public static LogonViewModel Instance => _instance ?? (_instance = new LogonViewModel());
 
         private string _ComputerName = Environment.MachineName;
 

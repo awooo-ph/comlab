@@ -5,6 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ComLab"
         mc:Ignorable="d"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="14"
+        WindowStartupLocation="CenterScreen"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="Black"
+        ShowInTaskbar="False"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:network="clr-namespace:ComLab.Network"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         

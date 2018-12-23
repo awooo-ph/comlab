@@ -21,4 +21,24 @@ namespace ComLab.Network
         [ProtoMember(3)]
         public Student Student { get; set; }
     }
+
+    public enum LockClientReasons
+    {
+        ClassEnded,
+        InstructorLogout,
+        StudentLogout
+    }
+
+    [ProtoContract]
+    class LockClient : Packet<LockClient>
+    {
+        [ProtoMember(1)]
+        public LockClientReasons LockReason { get; set; } = LockClientReasons.ClassEnded;
+    }
+
+    [ProtoContract]
+    class RestartClient : Packet<RestartClient> { }
+
+    [ProtoContract]
+    class ShutdownClient : Packet<ShutdownClient> { }
 }

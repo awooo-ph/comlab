@@ -10,6 +10,7 @@
              xmlns:viewModels="clr-namespace:ComLab.ViewModels"
              Background="{StaticResource MaterialDesignPaper}"
              xmlns:converters="clr-namespace:ComLab.Converters"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              d:DesignHeight="450" d:DesignWidth="800">
   <Grid>
     <Grid.RowDefinitions>
@@ -111,6 +112,7 @@
           <Setter Property="IsHitTestVisible" Value="{Binding IsHeader,Converter={converters:Inverter}}"/>
           <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
           <Setter Property="Cursor" Value="Hand"/>
+          <Setter Property="Visibility" Value="{Binding Visibility,Mode=OneWay}"/>
         </Style>
       </ListBox.ItemContainerStyle>
       <ListBox.ItemTemplate>
@@ -123,12 +125,12 @@
               <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Rectangle Width="20" Visibility="{Binding IsHeader,Converter={converters:BooleanToVisibility Collapsed,Visible}}"/>
-              <TextBlock Text="{Binding Title}"
+              <TextBlock Text="{Binding Title,Mode=OneWay}"
                        Grid.Column="1"/>
              
             </Grid>
             <Rectangle Width="4" Fill="{StaticResource PrimaryHueMidBrush}"
-                       HorizontalAlignment="Right"
+                       HorizontalAlignment="Left"
                        Visibility="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem},Path=IsSelected,Converter={converters:BooleanToVisibility}}"/>
             <Rectangle Height="1" Fill="{StaticResource MaterialDesignDivider}"
                        VerticalAlignment="Top" SnapsToDevicePixels="True"
@@ -136,6 +138,7 @@
             <Button Style="{StaticResource MaterialDesignToolButton}"
                     Focusable="False"
                     IsTabStop="False"
+                    IsEnabled="{Binding IsEnabled}"
                     Visibility="{Binding IsSelectable,Converter={converters:BooleanToVisibility Collapsed,Visible}}"
                     Command="{Binding Command}"
                     Height="Auto"/>

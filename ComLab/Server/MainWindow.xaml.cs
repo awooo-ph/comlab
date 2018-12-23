@@ -16,6 +16,7 @@ namespace ComLab
         {
             InitializeComponent();
             DataContext = MainViewModel.Instance;
+            Core.Context = SynchronizationContext.Current;
             Server.Start();
         }
 

@@ -27,7 +27,7 @@
     </StackPanel>
 
 
-    <StackPanel Grid.Row="1" Margin="20" DataContext="{Binding Student}">
+    <StackPanel Grid.Row="1" Margin="20 0 20 20" DataContext="{Binding Student}">
       <Grid 
         Margin="0 0 0 20">
       <UniformGrid Rows="1">
@@ -48,36 +48,22 @@
                    Opacity="0.4"
                    SnapsToDevicePixels="True" HorizontalAlignment="Center"/>
       </Grid>
+  
 
-      <Grid 
-        Margin="0 0 0 20">
-        <UniformGrid Rows="1">
-          <TextBox Text="{Binding Firstname,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
-                   md:TextFieldAssist.RippleOnFocusEnabled="True"
-                   md:TextFieldAssist.HasFilledTextField="True"
-                   md:HintAssist.Hint="FIRST NAME"
-                   md:TextFieldAssist.TextFieldCornerRadius="7 0 0 7"
-                   md:HintAssist.IsFloating="True"/>
-          <TextBox Text="{Binding Lastname,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
-                   md:TextFieldAssist.RippleOnFocusEnabled="True"
-                   md:TextFieldAssist.HasFilledTextField="True"
-                   md:HintAssist.Hint="LAST NAME"
-                   md:TextFieldAssist.TextFieldCornerRadius="0 7 7 0"
-                   md:HintAssist.IsFloating="True"/>
-        </UniformGrid>
-        <Rectangle Fill="{StaticResource MaterialDesignDivider}" Width="1"
-                   Opacity="0.4"
-                   SnapsToDevicePixels="True" HorizontalAlignment="Center"/>
-      </Grid>
-
-
-      <TextBox Text="{Binding Username,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+      <TextBox Text="{Binding Firstname,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
                md:TextFieldAssist.RippleOnFocusEnabled="True"
                md:TextFieldAssist.HasFilledTextField="True"
-               md:HintAssist.Hint="USERNAME"
-               md:TextFieldAssist.TextFieldCornerRadius="7"
+               md:HintAssist.Hint="FIRST NAME"
                Margin="0 0 0 20"
                md:HintAssist.IsFloating="True"/>
+
+      <TextBox Text="{Binding Lastname,UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}"
+               md:TextFieldAssist.RippleOnFocusEnabled="True"
+               md:TextFieldAssist.HasFilledTextField="True"
+               md:HintAssist.Hint="LAST NAME"
+               Margin="0 0 0 20"
+               md:HintAssist.IsFloating="True"/>
+
     </StackPanel>
 
     <UniformGrid Rows="1" Grid.Row="2" Margin="20">
