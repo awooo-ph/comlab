@@ -19,11 +19,18 @@ namespace ComLab.ViewModels
 {
     class MainViewModel:ViewModelBase
     {
-        private MenuItem ClassManager, StartClassMenu,EnrollStudentMenu,CreateClassMenu,EndClassMenu;
+        private MenuItem ClassManager, StartClassMenu,EnrollStudentMenu,CreateClassMenu,EndClassMenu,CurrentClassMenu;
         private Timer _clock;
 
         private MainViewModel()
         {
+            CurrentClassMenu = new MenuItem
+            {
+                Title = "CURRENT CLASS",
+                Visibility = Visibility.Collapsed,
+                IsSelectable = true,
+                Command = new DelegateCommand(d => { PageContent = Session.Instance;})
+            };
             ClassManager = new MenuItem
             {
                 Title = "CLASS MANAGER",
@@ -55,6 +62,7 @@ namespace ComLab.ViewModels
                 EnrollStudentMenu,
                 CreateClassMenu,
                 StartClassMenu,
+                CurrentClassMenu,
                 new MenuItem {Title = "ADMINISTRATION", IsHeader = true},
                 new MenuItem
                 {
@@ -118,6 +126,12 @@ namespace ComLab.ViewModels
             }
         }
 
+        private ICommand _SelectCurrentClassCommand;
+
+        public ICommand SelectCurrentClassCommand =>
+            _SelectCurrentClassCommand ?? (_SelectCurrentClassCommand = new DelegateCommand(
+                d => { CurrentClassMenu.IsSelected = true; }));
+
         private ICommand _EndClassCommand;
         public ICommand EndClassCommand => _EndClassCommand ?? (_EndClassCommand = new DelegateCommand(d =>EndClass()));
 
@@ -127,7 +141,10 @@ namespace ComLab.ViewModels
             ClassSession.Ended = DateTime.Now;
             ClassSession.Save();
             ClassSession = null;
-            StartClassMenu.IsEnabled = true;
+            StartClassMenu.Visibility = Visibility.Visible;
+            CurrentClassMenu.Visibility = Visibility.Collapsed;
+            if (CurrentClassMenu.IsSelected)
+                ClassManager.IsSelected = true;
             Server.Broadcast(new EndClass());
         }
 
@@ -159,16 +176,13 @@ namespace ComLab.ViewModels
                 ClassStarted = true,
                 HasInstructor = true,
             };
+            
+            StartClassMenu.Visibility = Visibility.Collapsed;
+            CurrentClassMenu.Visibility = Visibility.Visible;
+            CurrentClassMenu.IsSelected = true;
+            CurrentClassMenu.Title = c.Title;
 
-            //foreach (var item in Classes.Cache)
-            //{
-            //    if (item.Id == c.Id) continue;
-            //    item.IsEnabled = false;
-            //}
-
-            StartClassMenu.IsEnabled = false;
             Server.Broadcast(classInfo);
-            ClassManager.IsSelected = true;
         }
 
         public string CurrentTime

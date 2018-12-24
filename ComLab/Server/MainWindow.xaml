@@ -30,8 +30,11 @@
     <DataTemplate DataType="{x:Type viewModels:Terminals}">
       <views:Terminals/>
     </DataTemplate>
+    <DataTemplate DataType="{x:Type viewModels:Session}">
+      <views:Session/>
+    </DataTemplate>
   </Window.Resources>
-  <md:DialogHost Identifier="DialogHost" CloseOnClickAway="True">
+  <md:DialogHost Identifier="DialogHost" CloseOnClickAway="False">
   <md:DrawerHost IsLeftDrawerOpen="{Binding IsMenuOpen}"
                  LeftDrawerBackground="{StaticResource MaterialDesignBackground}">
     <md:DrawerHost.LeftDrawerContent>
@@ -81,6 +84,11 @@
                              Opacity="0.7" TextAlignment="Center"
                            Style="{StaticResource MaterialDesignSubheadingTextBlock}"/>
                 </StackPanel>
+                <Button Style="{StaticResource MaterialDesignToolButton}"
+                        Grid.ColumnSpan="2"
+                        Height="Auto"
+                        VerticalAlignment="Stretch"
+                        Command="{Binding SelectCurrentClassCommand}"/>
                 <Button VerticalAlignment="Center"
                         Grid.Column="2"
                         Command="{Binding EndClassCommand}"

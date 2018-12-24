@@ -6,10 +6,10 @@ using ProtoBuf;
 namespace ComLab.Network
 {
     [ProtoContract]
-    class Student:Packet<Student>
+    class StudentInfo:Packet<StudentInfo>
     {
-        public Student() { }
-
+        public StudentInfo() { }
+        
         private string _Firstname;
         [ProtoMember(1)]
         public string Firstname

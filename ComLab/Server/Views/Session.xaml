@@ -4,13 +4,53 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ComLab.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewModels="clr-namespace:ComLab.ViewModels"
+             xmlns:converters="clr-namespace:ComLab.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-    </Grid>
+      <Rectangle Fill="{StaticResource MaterialDesignDarkBackground}" Height="7"
+                 VerticalAlignment="Top"/>
+    <DataGrid AutoGenerateColumns="False" CanUserAddRows="False"
+              Margin="0 7 0 0" ItemsSource="{Binding Terminals}"
+              CanUserDeleteRows="False"
+              CanUserReorderColumns="False"
+              CanUserResizeColumns="False"
+              CanUserResizeRows="False"
+              CanUserSortColumns="True">
+      <DataGrid.Columns>
+        <DataGridCheckBoxColumn Binding="{Binding IsSelected}"
+                                ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}"/>
+        <DataGridTextColumn Header="CLIENT NAME"
+                            Binding="{Binding Name,Mode=OneWay}"
+                            IsReadOnly="True"/>
+        <DataGridTextColumn Header="STATUS"
+                            Binding="{Binding Status}"
+                            IsReadOnly="True"/>
+        <DataGridTemplateColumn Header="STUDENT">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Grid>
+                <TextBlock Text="{Binding Student.Fullname}" VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+                <Button Style="{StaticResource MaterialDesignToolButton}"
+                        Visibility="{Binding HasStudent,Converter={converters:BooleanToVisibility Collapsed,Visible}}"
+                        Command="{Binding Source={x:Static viewModels:Session.Instance},Path=AssignCommand}"
+                        CommandParameter="{Binding}"
+                        Height="Auto"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        Content="ASSIGN"
+                        Padding="0"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"/>
+              </Grid>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
 </UserControl>

@@ -72,7 +72,7 @@ namespace ComLab.Network
                 }
 
                 terminal.Student = student;
-                result.Student = new Network.Student
+                result.StudentInfo = new Network.StudentInfo
                 {
                     Firstname = student.Firstname,
                     Lastname = student.Lastname,

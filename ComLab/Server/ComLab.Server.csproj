@@ -96,6 +96,9 @@
     <Compile Include="Dialogs\StartClassDialog.xaml.cs">
       <DependentUpon>StartClassDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\StudentSelector.xaml.cs">
+      <DependentUpon>StudentSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ListBoxHelper.cs" />
     <Compile Include="Network\LoginHandler.cs" />
     <Compile Include="Network\Server.cs" />
@@ -103,6 +106,7 @@
     <Compile Include="ViewModels\Classes.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MenuItem.cs" />
+    <Compile Include="ViewModels\Session.cs" />
     <Compile Include="ViewModels\Students.cs" />
     <Compile Include="ViewModels\Terminals.cs" />
     <Compile Include="Views\Classes.xaml.cs">
@@ -140,6 +144,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Dialogs\StartClassDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\StudentSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="ComLab.Dialogs.StudentSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ComLab.Dialogs"
+             mc:Ignorable="d" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:converters="clr-namespace:ComLab.Converters"
+             d:DesignHeight="450" d:DesignWidth="800">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <StackPanel Orientation="Horizontal" Margin="20">
+      <md:PackIcon Kind="AccountStar" 
+                   Height="47" Width="47"/>
+
+      <TextBlock Text="  ASSIGN STUDENT" 
+                 VerticalAlignment="Center"
+               Margin="0 0 47 0"
+                 Style="{StaticResource MaterialDesignHeadlineTextBlock}"/>
+    </StackPanel>
+
+    <StackPanel Grid.Row="1" Margin="20 0 20 20" DataContext="{Binding Student}">
+      <TextBox Text="{Binding DataContext.StudentId,RelativeSource={RelativeSource AncestorType=local:StudentSelector},UpdateSourceTrigger=PropertyChanged}"
+               md:TextFieldAssist.RippleOnFocusEnabled="True"
+               md:TextFieldAssist.HasFilledTextField="True"
+               md:HintAssist.Hint="STUDENT ID"
+               TextAlignment="Center"
+               md:TextFieldAssist.TextFieldCornerRadius="7"
+               Margin="0 0 0 20"
+               md:HintAssist.IsFloating="True"/>
+
+      <TextBox Text="{Binding Firstname,Mode=OneWay}"
+               IsReadOnly="True"
+               md:TextFieldAssist.RippleOnFocusEnabled="True"
+               md:TextFieldAssist.HasFilledTextField="True"
+               md:TextFieldAssist.TextFieldCornerRadius="7 7 0 0"
+               md:HintAssist.Hint="FIRST NAME"
+               md:HintAssist.IsFloating="True"/>
+
+      <TextBox Text="{Binding Lastname,Mode=OneWay}"
+               IsReadOnly="True"
+               md:TextFieldAssist.RippleOnFocusEnabled="True"
+               md:TextFieldAssist.HasFilledTextField="True"
+               md:TextFieldAssist.TextFieldCornerRadius="0 0 7 7"
+               md:HintAssist.Hint="LAST NAME"
+               Margin="0 0 0 20"
+               md:HintAssist.IsFloating="True"/>
+
+    </StackPanel>
+
+    <UniformGrid Rows="1" Grid.Row="2" Margin="20">
+      <Button Style="{StaticResource MaterialDesignFlatButton}"
+              Content="CANCEL"
+              IsCancel="True"
+              Command="{Binding Source={x:Static md:DialogHost.CloseDialogCommand}}"
+              Margin="0 0 10 0">
+        <Button.CommandParameter>
+          <system:Boolean>False</system:Boolean>
+        </Button.CommandParameter>
+      </Button>
+      <Button Content="ASSIGN"
+              Margin="10 0 0 0"
+              IsEnabled="{Binding Student.IsNew,Converter={converters:Inverter}}"
+              Command="{Binding Source={x:Static md:DialogHost.CloseDialogCommand}}"
+              IsDefault="True">
+        <Button.CommandParameter>
+          <system:Boolean>True</system:Boolean>
+        </Button.CommandParameter>
+      </Button>
+    </UniformGrid>
+  </Grid>
+</UserControl>

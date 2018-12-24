@@ -20,7 +20,7 @@ namespace ComLab.Network
         {
             return Header;
         }
-
+        
         public Task Send(EndPoint ep)
         {
             return Send(ep as IPEndPoint);

@@ -25,4 +25,11 @@ namespace ComLab.Network
 
     [ProtoContract]
     class EndClass : Packet<EndClass> { }
+
+    [ProtoContract]
+    class AssignStudent : Packet<AssignStudent>
+    {
+        [ProtoMember(1)]
+        public StudentInfo StudentInfo { get; set; }
+    }
 }

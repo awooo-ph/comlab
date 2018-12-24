@@ -19,7 +19,7 @@ namespace ComLab.Network
         [ProtoMember(2)]
         public bool Success { get; set; }
         [ProtoMember(3)]
-        public Student Student { get; set; }
+        public StudentInfo StudentInfo { get; set; }
     }
 
     public enum LockClientReasons
